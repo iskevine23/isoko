@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Isoko: Rwanda market prices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f6ef;--panel:#fff;--ink:#1a2b21;--mute:#5b6b61;--line:#d9e2d6;--green:#2c6e3f;--greenbg:#dcecdf;--amber:#b56d00;--amberbg:#fbe9c6;--down:#a23b2a;--dot:#2c6e3f;--sel:#b56d00;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a14;--panel:#17251c;--ink:#e6efe8;--mute:#9db0a3;--line:#2a3d31;--green:#7cc48d;--greenbg:#1f3a28;--amber:#f0b44a;--amberbg:#3d2e10;--down:#e58b78;--dot:#7cc48d;--sel:#f0b44a}}
+:root[data-theme="dark"]{--bg:#101a14;--panel:#17251c;--ink:#e6efe8;--mute:#9db0a3;--line:#2a3d31;--green:#7cc48d;--greenbg:#1f3a28;--amber:#f0b44a;--amberbg:#3d2e10;--down:#e58b78;--dot:#7cc48d;--sel:#f0b44a}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Source Sans 3",system-ui,sans-serif}
+.w{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+h1,h2{font-family:"Bricolage Grotesque",system-ui,sans-serif;margin:0;letter-spacing:-.01em}
+h1{font-size:34px;font-weight:800}h2{font-size:20px;font-weight:600;margin-bottom:8px}
+.sub{color:var(--mute);margin:4px 0 18px}
+.chips,.seg{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;color:inherit;cursor:pointer}
+.chip{border:1.5px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 16px;font-weight:600}
+.chip[aria-pressed=true]{background:var(--green);border-color:var(--green);color:#fff}
+:root[data-theme="dark"] .chip[aria-pressed=true]{color:#101a14}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip[aria-pressed=true]{color:#101a14}}
+button:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.row{display:flex;align-items:center;gap:12px;margin:18px 0 10px;flex-wrap:wrap}
+.seg button{border:1.5px solid var(--line);background:var(--panel);padding:8px 20px;font-weight:600}
+.seg button:first-child{border-radius:10px 0 0 10px}.seg button:last-child{border-radius:0 10px 10px 0;margin-left:-1.5px}
+.seg button[aria-pressed=true]{background:var(--amber);border-color:var(--amber);color:#fff}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:14px}
+.best{background:var(--greenbg);border-color:transparent}
+.best ol{list-style:none;margin:8px 0 0;padding:0}
+.best li{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.best li:first-child{border-top:0}.big{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:22px;white-space:nowrap}
+.mute{color:var(--mute);font-size:14px}.up{color:var(--green)}.dn{color:var(--down)}
+svg{width:100%;height:auto;display:block}
+.tip{min-height:24px;font-weight:600;margin-top:6px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:460px}
+th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}th{font-size:14px;color:var(--mute);font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+select{font:inherit;padding:7px 10px;border-radius:8px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink)}
+.note{border-left:4px solid var(--amber);padding:2px 0 2px 12px;margin-top:14px;color:var(--mute);font-size:15px}
+
+.chat{margin-top:14px}.msgs{max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.msg{padding:9px 12px;border-radius:12px;max-width:88%;white-space:pre-wrap}
+.msg.u{align-self:flex-end;background:var(--green);color:#fff}
+:root[data-theme="dark"] .msg.u{color:#101a14}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .msg.u{color:#101a14}}
+.msg.b{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}.msg small{display:block;color:var(--mute);margin-top:4px}
+.ask{display:flex;gap:8px}.ask input{flex:1;font:inherit;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink);min-width:0}
+.ask button{border:0;background:var(--amber);color:#fff;border-radius:10px;padding:0 18px;font-weight:600}
+.sug{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.sug button{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:5px 12px;font-size:14px}
+</style></head><body><div class="w">
+<h1>Isoko</h1><p class="sub">Compare market prices before you sell or buy. Rwanda, retail prices per kg.</p>
+<div class="chips" id="chips" role="group" aria-label="Choose a crop"></div>
+<div class="row"><span>I want to</span><div class="seg" id="seg" role="group" aria-label="Sell or buy"></div></div>
+<div class="card best" id="best"></div>
+<div class="card"><h2>Where every market stands</h2><div class="mute" id="asof"></div><svg id="ladder" viewBox="0 0 700 150" role="img" aria-label="Prices of all markets on one line"></svg><div class="tip" id="tip">Tap a dot to see the market.</div></div>
+<div class="card"><div class="row" style="margin-top:0"><h2 style="margin:0">All markets</h2><label class="mute">District <select id="dist"></select></label></div>
+<div class="tw"><table><thead><tr><th>Market</th><th class="n">RWF/kg</th><th class="n">vs middle</th><th class="n">Next month</th></tr></thead><tbody id="tb"></tbody></table></div></div>
+<div class="card"><h2>Time of year</h2><div class="mute">Usual price compared with the yearly average, by month.</div><svg id="sea" viewBox="0 0 700 170" role="img" aria-label="Seasonal price pattern"></svg></div>
+<div class="card chat"><h2>Ask Isoko</h2><div class="mute">Ask about a crop, a market or a district. Try English or a crop name in Kinyarwanda.</div>
+<div class="msgs" id="msgs" aria-live="polite"></div>
+<form class="ask" id="ask"><label for="q" style="position:absolute;left:-9999px">Your question</label><input id="q" maxlength="200" placeholder="e.g. Where are beans cheapest?" autocomplete="off"><button type="submit">Ask</button></form>
+<div class="sug" id="sug"></div></div>
+<div class="note" id="rel"></div>
+<div class="note">Source: WFP market price survey (retail prices, not what a farmer is paid at the farm). Next-month figures are estimates from a model trained on past prices. Markets with fewer than 8 records show no estimate.</div>
+</div>
+<script>
+const D={"Potatoes (Irish)":{"last":"July 2026","mk":[{"d":"Kirehe","m":"Kigufi","p":450,"f":0.126,"t":-0.288,"n":13},{"d":"Kirehe","m":"Nyakarambi","p":550,"f":-0.0,"t":0.452,"n":179},{"d":"Gisagara","m":"Kabuga","p":600,"f":-0.014,"t":0.182,"n":95},{"d":"Nyamagabe","m":"Kigeme","p":525,"f":0.087,"t":-0.091,"n":103},{"d":"Kirehe","m":"Nyamugari","p":750,"f":-0.073,"t":0.223,"n":29},{"d":"Nyamagabe","m":"Gasarenda","p":500,"f":0.098,"t":-0.039,"n":178},{"d":"Nyamagabe","m":"Kabacuzi","p":580,"f":0.069,"t":0.053,"n":113},{"d":"Karongi","m":"Kiziba (Camp)","p":720,"f":-0.003,"t":0.269,"n":97},{"d":"Kirehe","m":"Kabeza","p":700,"f":0.042,"t":0.154,"n":76},{"d":"Kirehe","m":"Gatore","p":700,"f":-0.02,"t":0.56,"n":67},{"d":"Karongi","m":"Mubuga","p":700,"f":-0.009,"t":0.336,"n":91},{"d":"Karongi","m":"Kivuruga","p":700,"f":-0.028,"t":0.442,"n":84},{"d":"Karongi","m":"Karongi","p":750,"f":-0.031,"t":0.31,"n":91},{"d":"Gisagara","m":"Mugombwa (Camp)","p":580,"f":0.085,"t":0.009,"n":104},{"d":"Gisagara","m":"Mugombwa","p":567,"f":0.097,"t":-0.015,"n":89},{"d":"Gisagara","m":"Kibirizi","p":550,"f":0.092,"t":0.095,"n":132},{"d":"Gatsibo","m":"Nyabiheke (Camp)","p":620,"f":0.089,"t":0.016,"n":100},{"d":"Gatsibo","m":"Ntungaruze","p":550,"f":0.107,"t":0.095,"n":63},{"d":"Gatsibo","m":"Mugera","p":550,"f":0.079,"t":0.201,"n":101},{"d":"Gatsibo","m":"Bubare","p":600,"f":0.079,"t":0.087,"n":47},{"d":"Kirehe","m":"Mahama (Camp)","p":725,"f":-0.06,"t":0.189,"n":89},{"d":"Nyamagabe","m":"Kigeme (Camp)","p":588,"f":0.057,"t":0.043,"n":102}],"season":[-0.2,-0.122,-0.006,0.033,0.016,-0.004,0.018,0.107,0.134,0.108,0.036,-0.097],"hist":[["Aug 24",597],["Sep 24",600],["Oct 24",604],["Nov 24",562],["Dec 24",505],["Jan 25",450],["Feb 25",450],["Mar 25",500],["Apr 25",550],["May 25",550],["Jun 25",550],["Jul 25",450],["Aug 25",480],["Sep 25",500],["Oct 25",543],["Dec 25",450],["Jan 26",450],["Feb 26",475],["Apr 26",550],["May 26",650],["Jun 26",550],["Jul 26",600]],"bt":{"mm":0.116,"mn":0.118,"da":0.71,"nb":80}},"Beans (dry)":{"last":"August 2026","mk":[{"d":"Kirehe","m":"Kigufi","p":900,"f":0.027,"t":0.118,"n":32},{"d":"Kirehe","m":"Nyakarambi","p":900,"f":0.024,"t":0.182,"n":184},{"d":"Gisagara","m":"Kabuga","p":650,"f":0.112,"t":0.0,"n":109},{"d":"Karongi","m":"Rubengera","p":1100,"f":0.013,"t":0.0,"n":24},{"d":"Kirehe","m":"Gatore","p":750,"f":0.072,"t":0.143,"n":92},{"d":"Kirehe","m":"Nyamugari","p":800,"f":0.071,"t":0.208,"n":32},{"d":"Nyamagabe","m":"Kabacuzi","p":1000,"f":0.024,"t":0.163,"n":124},{"d":"Nyamagabe","m":"Gasarenda","p":800,"f":0.063,"t":-0.206,"n":188},{"d":"Gatsibo","m":"Bubare","p":800,"f":0.058,"t":-0.118,"n":84},{"d":"Karongi","m":"Karongi","p":1124,"f":0.016,"t":0.117,"n":111},{"d":"Gatsibo","m":"Ngarama","p":800,"f":0.058,"t":-0.061,"n":18},{"d":"Gatsibo","m":"Ntungaruze","p":800,"f":0.058,"t":0.01,"n":87},{"d":"Karongi","m":"Mubuga","p":1117,"f":-0.005,"t":0.11,"n":111},{"d":"Gisagara","m":"Gisagara","p":750,"f":0.094,"t":0.143,"n":16},{"d":"Karongi","m":"Kiziba (Camp)","p":1200,"f":0.022,"t":0.057,"n":116},{"d":"Nyamagabe","m":"Kigeme","p":939,"f":0.056,"t":0.002,"n":114},{"d":"Gatsibo","m":"Mugera","p":800,"f":0.072,"t":-0.118,"n":112},{"d":"Kirehe","m":"Mahama (Camp)","p":1033,"f":0.038,"t":0.033,"n":98},{"d":"Gisagara","m":"Kibirizi","p":850,"f":0.072,"t":0.0,"n":146},{"d":"Kirehe","m":"Kiyanzi","p":700,"f":0.12,"t":-0.134,"n":41},{"d":"Gisagara","m":"Mugombwa","p":833,"f":0.072,"t":0.105,"n":103},{"d":"Kirehe","m":"Kabeza","p":1000,"f":0.04,"t":0.0,"n":85},{"d":"Gisagara","m":"Mugombwa (Camp)","p":952,"f":0.06,"t":-0.015,"n":116},{"d":"Karongi","m":"Kivuruga","p":1200,"f":0.02,"t":0.028,"n":104},{"d":"Gatsibo","m":"Nyabiheke (Camp)","p":939,"f":0.044,"t":-0.038,"n":118},{"d":"Nyamagabe","m":"Kigeme (Camp)","p":985,"f":0.049,"t":-0.031,"n":111}],"season":[-0.162,-0.141,-0.066,0.016,-0.036,-0.026,-0.001,0.033,0.087,0.124,0.149,0.04],"hist":[["Aug 24",787],["Sep 24",898],["Oct 24",983],["Nov 24",992],["Dec 24",933],["Jan 25",800],["Feb 25",800],["Mar 25",842],["Apr 25",956],["May 25",891],["Jun 25",800],["Jul 25",810],["Aug 25",875],["Sep 25",912],["Oct 25",858],["Nov 25",833],["Dec 25",800],["Jan 26",724],["Feb 26",800],["Mar 26",831],["Apr 26",982],["May 26",967],["Jun 26",890],["Jul 26",850],["Aug 26",945]],"bt":{"mm":0.08,"mn":0.087,"da":0.7,"nb":157}},"Maize":{"last":"August 2026","mk":[{"d":"Kirehe","m":"Kigufi","p":450,"f":0.101,"t":0.118,"n":30},{"d":"Kirehe","m":"Nyakarambi","p":400,"f":0.122,"t":0.0,"n":181},{"d":"Gisagara","m":"Kabuga","p":517,"f":0.037,"t":-0.15,"n":105},{"d":"Karongi","m":"Rubengera","p":633,"f":0.006,"t":-0.1,"n":24},{"d":"Kirehe","m":"Gatore","p":400,"f":0.113,"t":0.0,"n":85},{"d":"Kirehe","m":"Nyamugari","p":400,"f":0.094,"t":-0.405,"n":32},{"d":"Nyamagabe","m":"Kabacuzi","p":600,"f":0.018,"t":0.182,"n":119},{"d":"Nyamagabe","m":"Gasarenda","p":500,"f":0.042,"t":0.034,"n":187},{"d":"Gatsibo","m":"Bubare","p":450,"f":0.082,"t":-0.201,"n":81},{"d":"Karongi","m":"Karongi","p":700,"f":-0.025,"t":0.0,"n":111},{"d":"Gatsibo","m":"Ngarama","p":500,"f":0.035,"t":0.0,"n":18},{"d":"Gatsibo","m":"Ntungaruze","p":450,"f":0.084,"t":-0.201,"n":82},{"d":"Karongi","m":"Mubuga","p":600,"f":0.024,"t":0.182,"n":110},{"d":"Gisagara","m":"Gisagara","p":475,"f":0.041,"t":-0.274,"n":15},{"d":"Karongi","m":"Kiziba (Camp)","p":800,"f":-0.024,"t":0.208,"n":108},{"d":"Nyamagabe","m":"Kigeme","p":556,"f":0.087,"t":-0.023,"n":114},{"d":"Gatsibo","m":"Mugera","p":500,"f":0.116,"t":-0.095,"n":112},{"d":"Kirehe","m":"Mahama (Camp)","p":500,"f":0.143,"t":-0.17,"n":98},{"d":"Gisagara","m":"Kibirizi","p":600,"f":0.028,"t":0.182,"n":127},{"d":"Kirehe","m":"Kiyanzi","p":400,"f":0.208,"t":-0.223,"n":38},{"d":"Gisagara","m":"Mugombwa","p":600,"f":0.05,"t":0.087,"n":95},{"d":"Kirehe","m":"Kabeza","p":500,"f":0.144,"t":0.0,"n":82},{"d":"Gisagara","m":"Mugombwa (Camp)","p":652,"f":0.043,"t":0.09,"n":114},{"d":"Karongi","m":"Kivuruga","p":800,"f":-0.019,"t":0.134,"n":104},{"d":"Gatsibo","m":"Nyabiheke (Camp)","p":581,"f":0.058,"t":-0.151,"n":117},{"d":"Nyamagabe","m":"Kigeme (Camp)","p":600,"f":0.04,"t":0.0,"n":110}],"season":[0.073,-0.11,-0.163,-0.112,-0.103,-0.063,-0.026,-0.006,0.065,0.114,0.188,0.197],"hist":[["Aug 24",400],["Sep 24",437],["Oct 24",500],["Nov 24",543],["Dec 24",577],["Jan 25",582],["Feb 25",500],["Mar 25",407],["Apr 25",475],["May 25",500],["Jun 25",525],["Jul 25",525],["Aug 25",570],["Sep 25",595],["Oct 25",618],["Nov 25",638],["Dec 25",689],["Jan 26",638],["Feb 26",600],["Mar 26",552],["Apr 26",550],["May 26",598],["Jun 26",553],["Jul 26",568],["Aug 26",590]],"bt":{"mm":0.077,"mn":0.078,"da":0.69,"nb":131}},"Maize flour":{"last":"August 2026","mk":[{"d":"Kirehe","m":"Kigufi","p":1000,"f":-0.004,"t":0.0,"n":28},{"d":"Kirehe","m":"Nyakarambi","p":950,"f":0.012,"t":-0.051,"n":184},{"d":"Gisagara","m":"Kabuga","p":983,"f":-0.001,"t":0.126,"n":101},{"d":"Karongi","m":"Rubengera","p":840,"f":0.028,"t":-0.174,"n":23},{"d":"Kirehe","m":"Gatore","p":1000,"f":-0.011,"t":0.0,"n":96},{"d":"Kirehe","m":"Nyamugari","p":1000,"f":-0.004,"t":0.0,"n":34},{"d":"Nyamagabe","m":"Kabacuzi","p":900,"f":0.012,"t":0.057,"n":122},{"d":"Nyamagabe","m":"Gasarenda","p":900,"f":0.019,"t":0.118,"n":176},{"d":"Gatsibo","m":"Bubare","p":900,"f":0.018,"t":0.0,"n":86},{"d":"Karongi","m":"Karongi","p":891,"f":0.026,"t":-0.011,"n":104},{"d":"Gatsibo","m":"Ngarama","p":900,"f":0.013,"t":0.0,"n":18},{"d":"Gatsibo","m":"Ntungaruze","p":900,"f":0.014,"t":0.014,"n":84},{"d":"Karongi","m":"Mubuga","p":900,"f":0.012,"t":0.182,"n":102},{"d":"Gisagara","m":"Gisagara","p":867,"f":0.023,"t":0.08,"n":16},{"d":"Karongi","m":"Kiziba (Camp)","p":893,"f":0.03,"t":0.062,"n":103},{"d":"Nyamagabe","m":"Kigeme","p":878,"f":0.032,"t":-0.048,"n":100},{"d":"Gatsibo","m":"Mugera","p":900,"f":0.033,"t":0.0,"n":107},{"d":"Kirehe","m":"Mahama (Camp)","p":1000,"f":-0.002,"t":0.025,"n":96},{"d":"Gisagara","m":"Kibirizi","p":933,"f":0.012,"t":0.0,"n":144},{"d":"Kirehe","m":"Kiyanzi","p":1000,"f":-0.003,"t":0.0,"n":44},{"d":"Gisagara","m":"Mugombwa","p":917,"f":0.018,"t":0.076,"n":103},{"d":"Kirehe","m":"Kabeza","p":900,"f":0.036,"t":-0.105,"n":82},{"d":"Gisagara","m":"Mugombwa (Camp)","p":993,"f":-0.003,"t":0.044,"n":108},{"d":"Karongi","m":"Kivuruga","p":880,"f":0.038,"t":-0.31,"n":100},{"d":"Gatsibo","m":"Nyabiheke (Camp)","p":961,"f":0.011,"t":-0.04,"n":109},{"d":"Nyamagabe","m":"Kigeme (Camp)","p":989,"f":-0.002,"t":0.04,"n":103}],"season":[0.028,-0.027,-0.032,-0.018,-0.043,-0.034,-0.023,-0.029,0.011,0.035,0.065,0.078],"hist":[["Aug 24",767],["Sep 24",800],["Oct 24",800],["Nov 24",868],["Dec 24",900],["Jan 25",871],["Feb 25",842],["Mar 25",818],["Apr 25",900],["May 25",912],["Jun 25",900],["Jul 25",881],["Aug 25",900],["Sep 25",900],["Oct 25",949],["Nov 25",900],["Dec 25",900],["Jan 26",962],["Feb 26",918],["Mar 26",952],["Apr 26",950],["May 26",921],["Jun 26",959],["Jul 26",900],["Aug 26",925]],"bt":{"mm":0.062,"mn":0.068,"da":0.71,"nb":129}}};
+const MO="Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" ");
+let crop=Object.keys(D)[0],mode="sell",dist="All",sel=null;
+const $=id=>document.getElementById(id),fmt=n=>n.toLocaleString("en-US");
+const pc=v=>(v>0?"+":"")+Math.round(v*100)+"%";
+const lab={"Potatoes (Irish)":"Irish potatoes","Beans (dry)":"Dry beans","Maize":"Maize (grain)","Maize flour":"Maize flour"};
+function med(a){const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2}
+function chips(){$("chips").innerHTML="";Object.keys(D).forEach(k=>{const b=document.createElement("button");b.className="chip";b.textContent=lab[k]||k;b.setAttribute("aria-pressed",k===crop);b.onclick=()=>{crop=k;dist="All";sel=null;render()};$("chips").appendChild(b)});
+$("seg").innerHTML="";[["sell","Sell"],["buy","Buy"]].forEach(([k,t])=>{const b=document.createElement("button");b.textContent=t;b.setAttribute("aria-pressed",k===mode);b.onclick=()=>{mode=k;render()};$("seg").appendChild(b)})}
+function outlook(m){if(m.n<8)return null;return m.f}
+function render(){chips();const c=D[crop],M=c.mk,md=med(M.map(m=>m.p));
+$("asof").textContent="Latest prices: "+c.last+" · "+M.length+" markets · middle price "+fmt(Math.round(md))+" RWF/kg";
+const sorted=[...M].sort((a,b)=>mode==="sell"?b.p-a.p:a.p-b.p).slice(0,3);
+$("best").innerHTML="<h2>"+(mode==="sell"?"Best places to sell ":"Cheapest places to buy ")+(lab[crop]||crop).toLowerCase()+"</h2><ol>"+sorted.map(m=>{const g=(m.p/md-1);const o=outlook(m);
+return "<li><div><b>"+m.m+"</b><div class='mute'>"+m.d+" · "+(mode==="sell"?"pays ":"costs ")+pc(Math.abs(g)).replace("+","")+(g>=0?" above":" below")+" the middle price"+(o!==null?" · next month "+(o>0.03?"may rise":o<-0.03?"may fall":"about the same"):"")+"</div></div><div class='big'>"+fmt(m.p)+"</div></li>"}).join("")+"</ol>";
+ladder(M,md);
+const ds=["All",...new Set(M.map(m=>m.d))].sort();$("dist").innerHTML=ds.map(d=>"<option "+(d===dist?"selected":"")+">"+d+"</option>").join("");$("dist").onchange=e=>{dist=e.target.value;table()};
+table();season(c);
+$("rel").textContent="How reliable is the next-month estimate? When we tested it on recent months it was off by about "+Math.round(c.bt.mm*100)+"% on average. Simply assuming no change was off by about "+Math.round(c.bt.mn*100)+"%. It named the right direction for "+Math.round(c.bt.da*100)+"% of moves larger than 3% ("+c.bt.nb+" cases). Use it as a rough guide, not a promise."}
+function table(){const M=D[crop].mk,md=med(M.map(m=>m.p));
+$("tb").innerHTML=M.filter(m=>dist==="All"||m.d===dist).sort((a,b)=>mode==="sell"?b.p-a.p:a.p-b.p).map(m=>{const g=m.p/md-1,o=outlook(m);
+return "<tr><td>"+m.m+"<div class='mute'>"+m.d+"</div></td><td class='n'><b>"+fmt(m.p)+"</b></td><td class='n "+(g>=0?"up":"dn")+"'>"+pc(g)+"</td><td class='n "+(o===null?"mute":o>0?"up":"dn")+"'>"+(o===null?"–":(o>0?"▲ ":"▼ ")+pc(o))+"</td></tr>"}).join("")}
+function ladder(M,md){const s=$("ladder"),lo=Math.min(...M.map(m=>m.p)),hi=Math.max(...M.map(m=>m.p)),x=p=>40+(p-lo)/(hi-lo||1)*620;
+const placed=[];let h='<line x1="30" x2="670" y1="100" y2="100" stroke="var(--line)" stroke-width="3"/>';
+h+='<line x1="'+x(md)+'" x2="'+x(md)+'" y1="20" y2="118" stroke="var(--mute)" stroke-dasharray="4 4"/><text x="'+x(md)+'" y="14" text-anchor="middle" font-size="13" fill="var(--mute)">middle '+fmt(Math.round(md))+'</text>';
+[...M].sort((a,b)=>a.p-b.p).forEach((m,i)=>{const cx=x(m.p);let lvl=0;while(placed.some(q=>q.l===lvl&&Math.abs(q.x-cx)<15))lvl++;placed.push({x:cx,l:lvl});m._x=cx;m._y=100-lvl*15;
+h+='<circle data-i="'+i+'" cx="'+cx+'" cy="'+m._y+'" r="7" fill="'+(m===sel?"var(--sel)":"var(--dot)")+'" opacity=".85" tabindex="0" role="button" aria-label="'+m.m+' '+m.p+'" style="cursor:pointer"/>'});
+h+='<text x="40" y="142" font-size="13" fill="var(--mute)">'+fmt(lo)+' cheapest</text><text x="660" y="142" text-anchor="end" font-size="13" fill="var(--mute)">'+fmt(hi)+' dearest</text>';s.innerHTML=h;
+const sorted=[...M].sort((a,b)=>a.p-b.p);
+s.querySelectorAll("circle").forEach(c=>{const m=sorted[+c.dataset.i];const go=()=>{$("tip").textContent=m.m+" ("+m.d+"): "+fmt(m.p)+" RWF/kg";s.querySelectorAll("circle").forEach(o=>o.setAttribute("fill","var(--dot)"));c.setAttribute("fill","var(--sel)")};c.onclick=go;c.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}})}
+function season(c){const v=c.season,mx=Math.max(...v.map(Math.abs))||.01,cur=new Date().getMonth();let h='<line x1="20" x2="690" y1="85" y2="85" stroke="var(--line)"/>';
+v.forEach((d,i)=>{const bh=Math.abs(d)/mx*60,x=28+i*56,y=d>=0?85-bh:85;h+='<rect x="'+x+'" y="'+y+'" width="40" height="'+Math.max(bh,2)+'" rx="4" fill="'+(d>=0?"var(--amber)":"var(--green)")+'" opacity="'+(i===cur?1:.6)+'"/><text x="'+(x+20)+'" y="'+(d>=0?y-5:y+bh+14)+'" text-anchor="middle" font-size="12" fill="var(--ink)">'+pc(d)+'</text><text x="'+(x+20)+'" y="165" text-anchor="middle" font-size="13" fill="'+(i===cur?"var(--ink)":"var(--mute)")+'" font-weight="'+(i===cur?700:400)+'">'+MO[i]+'</text>'});$("sea").innerHTML=h}
+render();
+
+//ENGINE-START
+const AL={"Maize flour":["flour","ifu"],"Potatoes (Irish)":["potato","irish","ibirayi"],"Beans (dry)":["bean","ibishyimbo"],"Maize":["maize","corn","ibigori"]};
+function scope(q,c){let M=D[c].mk,ql=q.toLowerCase();const byM=M.filter(m=>ql.includes(m.m.toLowerCase().replace(/ \(camp\)/,"")));
+const byD=M.filter(m=>ql.includes(m.d.toLowerCase()));const s=[...new Set([...byM,...byD])];return s.length?{M:s,where:true}:{M,where:false}}
+function line(m){return m.m+" ("+m.d+"): "+m.p.toLocaleString("en-US")+" RWF/kg"}
+function answer(raw){const q=raw.toLowerCase().trim();
+if(/^(hi|hello|hey|muraho|bonjour)\b/.test(q))return "Muraho! Ask me about Irish potatoes, dry beans, maize or maize flour. For example: where are potatoes cheapest?";
+let c=null;for(const k of ["Maize flour","Potatoes (Irish)","Beans (dry)","Maize"])if(AL[k].some(w=>q.includes(w))){c=k;break}
+if(!c&&/reliab|accura|trust|sure/.test(q))return "Next-month estimates were off by about "+Object.keys(D).map(k=>(lab[k]||k)+" "+Math.round(D[k].bt.mm*100)+"%").join(", ")+" in tests, only slightly better than assuming no change. Treat them as a rough guide.";
+if(!c)return "Which crop? I have Irish potatoes (ibirayi), dry beans (ibishyimbo), maize (ibigori) and maize flour. Try: \"Where can I sell beans?\"";
+const d=D[c],{M,where}=scope(q,c),name=lab[c]||c,sorted=[...M].sort((a,b)=>a.p-b.p),mdn=med(M.map(m=>m.p));
+const top=n=>sorted.slice(-n).reverse().map(line).join("\n"),low=n=>sorted.slice(0,n).map(line).join("\n");
+const rel="Estimates are rough: in tests they were off by about "+Math.round(d.bt.mm*100)+"% on average.";
+if(/reliab|accura|trust|sure/.test(q))return "Next-month estimates were off by about "+Math.round(d.bt.mm*100)+"% on average in tests. Assuming no change was off by about "+Math.round(d.bt.mn*100)+"%. So they help a little, but treat them as a rough guide.";
+if(/season|when|which month|time of year|usually/.test(q)){const s=d.season,hi=s.indexOf(Math.max(...s)),lo=s.indexOf(Math.min(...s));return name+" prices are usually highest around "+MO[hi]+" (about "+pc(s[hi])+" vs the yearly average) and lowest around "+MO[lo]+" ("+pc(s[lo])+"). This is an average pattern since 2015; single years can differ."}
+if(/next|forecast|predict|will |expect|rise|fall|going|coming/.test(q)){const f=M.filter(m=>m.n>=8).sort((a,b)=>b.f-a.f);if(!f.length)return "Not enough records in that area to estimate next month.";
+const up=f.filter(m=>m.f>0.03).slice(0,3),dn=f.filter(m=>m.f<-0.03).slice(-3).reverse();
+return name+", next month"+(where?" (for the markets you named)":"")+":\n"+(up.length?"May rise: "+up.map(m=>m.m+" "+pc(m.f)).join(", ")+"\n":"")+(dn.length?"May fall: "+dn.map(m=>m.m+" "+pc(m.f)).join(", ")+"\n":"")+(up.length||dn.length?"":"Mostly steady (changes under 3%).\n")+rel}
+if(/sell|best|highest|most|expens|dear|top|kugurisha/.test(q))return "Best places to sell "+name.toLowerCase()+" ("+d.last+"):\n"+top(3)+"\nMiddle price: "+Math.round(mdn).toLocaleString("en-US")+" RWF/kg. These are survey retail prices, so what a farmer is paid may be lower.";
+if(/cheap|buy|lowest|least|kugura/.test(q))return "Cheapest places to buy "+name.toLowerCase()+" ("+d.last+"):\n"+low(3)+"\nMiddle price: "+Math.round(mdn).toLocaleString("en-US")+" RWF/kg.";
+if(where)return name+" ("+d.last+"):\n"+sorted.map(line).join("\n")+"\nMiddle price across all markets: "+Math.round(med(d.mk.map(m=>m.p))).toLocaleString("en-US")+" RWF/kg.";
+return name+" ("+d.last+"): middle price "+Math.round(mdn).toLocaleString("en-US")+" RWF/kg. Cheapest: "+line(sorted[0])+". Dearest: "+line(sorted[sorted.length-1])+"."}
+//ENGINE-END
+function say(t,who,tag){const m=document.createElement("div");m.className="msg "+who;m.textContent=t;if(tag){const s=document.createElement("small");s.textContent=tag;m.appendChild(s)}$("msgs").appendChild(m);$("msgs").scrollTop=1e9}
+async function ask(q){say(q,"u");try{const ct=new AbortController(),t=setTimeout(()=>ct.abort(),12000);const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q}),signal:ct.signal});clearTimeout(t);if(r.ok){const j=await r.json();if(j.answer){say(j.answer,"b","AI answer, based on the price data");return}}}catch(e){}
+say(answer(q),"b","From the price data")}
+$("ask").onsubmit=e=>{e.preventDefault();const q=$("q").value.trim();if(q){$("q").value="";ask(q)}};
+["Where are potatoes cheapest?","Where can I sell beans?","Will maize prices rise?","When are beans dearest?"].forEach(t=>{const b=document.createElement("button");b.type="button";b.textContent=t;b.onclick=()=>ask(t);$("sug").appendChild(b)});
+say("Muraho! Ask me about prices for potatoes, beans, maize or maize flour.","b");
+</script></body></html>
