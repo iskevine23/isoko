@@ -30,7 +30,7 @@ function BrandMark({ compact = false }: { compact?: boolean }) {
       to="/"
       aria-label={`${PRODUCT_NAME} home`}
       className={cn(
-        "block overflow-hidden rounded-lg bg-black outline-none focus-visible:ring-2 focus-visible:ring-accent-green",
+        "block overflow-hidden rounded-lg bg-white px-2 py-1.5 outline-none focus-visible:ring-2 focus-visible:ring-accent-green",
         compact ? "w-[9.5rem]" : "w-full",
       )}
     >
