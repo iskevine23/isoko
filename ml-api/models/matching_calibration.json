@@ -1,0 +1,18 @@
+{
+  "backend": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "commodity": {
+    "auto_accept": 0.86,
+    "review_min": 0.8,
+    "embedding_suggest": null
+  },
+  "veto_margin_by_kind": {
+    "commodity": 9.0,
+    "market": 9.0
+  },
+  "market": {
+    "auto_accept": 0.85,
+    "review_min": 0.69,
+    "embedding_suggest": null
+  },
+  "calibratedAt": "2026-09-30T12:10:44+00:00"
+}

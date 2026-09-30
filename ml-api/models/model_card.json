@@ -1,0 +1,322 @@
+{
+  "generatedAt": "2026-09-30T12:10:44+00:00",
+  "runtime": {
+    "python": "3.13.14",
+    "sklearn": "1.9.1",
+    "rapidfuzz": "3.14.6"
+  },
+  "data": {
+    "source": "Rwanda e-Soko export",
+    "date": "2026-09-28",
+    "rows": 1096,
+    "pricedRows": 1096,
+    "commodities": 133,
+    "markets": 67
+  },
+  "anomalyEngine": {
+    "layers": [
+      "Rules (non-positive price)",
+      "Robust z-score + IQR per commodity × channel",
+      "Farm gate ≤ wholesale ≤ retail ladder",
+      "Isolation Forest on relative price features"
+    ],
+    "isolationForest": {
+      "library": "scikit-learn IsolationForest",
+      "trees": 200,
+      "maxSamples": 256,
+      "features": [
+        "Versus same commodity and channel",
+        "Robust z-score",
+        "Versus this market's usual level",
+        "Versus this province's usual level",
+        "Price channel",
+        "Retail versus farm gate",
+        "Wholesale versus farm gate",
+        "Retail versus wholesale"
+      ],
+      "contamination": 0.025,
+      "threshold": 0.621,
+      "trainingScores": {
+        "median": 0.3889,
+        "p90": 0.5098,
+        "p975": 0.621,
+        "max": 0.6996
+      }
+    },
+    "baselineFlagsOnSnapshot": {
+      "forest": 28,
+      "statistical": 47,
+      "ladder": 0,
+      "hybrid": 66
+    },
+    "evaluation": {
+      "protocol": "8 rounds × 40 errors injected into copies of the real snapshot, one per market-commodity price set. A detection counts when any row of that set is flagged.",
+      "byType": [
+        {
+          "type": "Extra zero (×10)",
+          "injected": 80,
+          "forestRecall": 87.5,
+          "statisticalRecall": 70.0,
+          "ladderRuleRecall": 100.0,
+          "hybridRecall": 100.0
+        },
+        {
+          "type": "Missing zero (÷10)",
+          "injected": 80,
+          "forestRecall": 80.0,
+          "statisticalRecall": 53.8,
+          "ladderRuleRecall": 98.8,
+          "hybridRecall": 100.0
+        },
+        {
+          "type": "Spike (+60%)",
+          "injected": 80,
+          "forestRecall": 50.0,
+          "statisticalRecall": 47.5,
+          "ladderRuleRecall": 62.5,
+          "hybridRecall": 82.5
+        },
+        {
+          "type": "Ladder inversion",
+          "injected": 80,
+          "forestRecall": 71.2,
+          "statisticalRecall": 45.0,
+          "ladderRuleRecall": 98.8,
+          "hybridRecall": 100.0
+        }
+      ],
+      "overall": {
+        "forestRecall": 72.2,
+        "statisticalRecall": 54.1,
+        "hybridRecall": 95.6
+      },
+      "untouchedFlagRate": {
+        "forest": 2.8,
+        "hybrid": 5.8
+      }
+    }
+  },
+  "matchingEngine": {
+    "pipeline": [
+      "Normalisation",
+      "Exact name / alias lookup",
+      "RapidFuzz ranking",
+      "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 embeddings as a second opinion when RapidFuzz < 0.92"
+    ],
+    "embeddingBackend": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "calibration": {
+      "commodity": {
+        "auto_accept": 0.86,
+        "review_min": 0.8,
+        "embedding_suggest": null
+      },
+      "market": {
+        "auto_accept": 0.85,
+        "review_min": 0.69,
+        "embedding_suggest": null
+      },
+      "veto_margin_by_kind": {
+        "commodity": 9.0,
+        "market": 9.0
+      }
+    },
+    "evaluation": {
+      "protocol": "Every catalog name (English + Kinyarwanda for commodities, e-Soko spelling for markets) plus four misspellings each, and 20 names in neither registry.",
+      "commodity": {
+        "cases": 1305,
+        "outOfCatalogNames": 20,
+        "thresholds": {
+          "auto_accept": 0.86,
+          "review_min": 0.8,
+          "embedding_suggest": null
+        },
+        "vetoMargin": 9.0,
+        "maxOutOfCatalogScore": 0.7762,
+        "maxOutOfCatalogEmbedding": 0.8252,
+        "marginSweep": [
+          {
+            "margin": 0.0,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 19.8,
+            "variantsAutoAccepted": 50.0
+          },
+          {
+            "margin": 0.02,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 18.5,
+            "variantsAutoAccepted": 50.0
+          },
+          {
+            "margin": 0.05,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 16.7,
+            "variantsAutoAccepted": 50.0
+          },
+          {
+            "margin": 0.08,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 14.5,
+            "variantsAutoAccepted": 50.0
+          },
+          {
+            "margin": 0.12,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 13.0,
+            "variantsAutoAccepted": 50.0
+          },
+          {
+            "margin": 0.2,
+            "autoAccept": 0.86,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 13.2,
+            "variantsAutoAccepted": 47.5
+          },
+          {
+            "margin": 9.0,
+            "autoAccept": 0.86,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 11.5,
+            "variantsAutoAccepted": 47.5
+          }
+        ],
+        "semanticSuggestion": {
+          "floorFromOutOfCatalog": 0.85,
+          "unknownCasesConsidered": 45,
+          "netCorrectRescues": 0
+        },
+        "rapidfuzzOnly": {
+          "top1": 99.9,
+          "autoAccepted": 84.4,
+          "autoAcceptPrecision": 100.0,
+          "wrongAutoAccepts": 0,
+          "sentToReview": 13.4,
+          "reviewSuggestionCorrect": 99.4,
+          "reportedUnknown": 2.2,
+          "outOfCatalogGivenSuggestion": 0
+        },
+        "rapidfuzzOnlyVariants": {
+          "top1": 65.0,
+          "autoAccepted": 45.0,
+          "autoAcceptPrecision": 100.0,
+          "wrongAutoAccepts": 0,
+          "sentToReview": 12.5,
+          "reviewSuggestionCorrect": 40.0,
+          "reportedUnknown": 42.5
+        },
+        "withEmbeddings": {
+          "top1": 99.9,
+          "autoAccepted": 86.3,
+          "autoAcceptPrecision": 100.0,
+          "wrongAutoAccepts": 0,
+          "sentToReview": 11.5,
+          "reviewSuggestionCorrect": 99.3,
+          "reportedUnknown": 2.2,
+          "outOfCatalogGivenSuggestion": 0
+        },
+        "withEmbeddingsVariants": {
+          "top1": 65.0,
+          "autoAccepted": 47.5,
+          "autoAcceptPrecision": 100.0,
+          "wrongAutoAccepts": 0,
+          "sentToReview": 12.5,
+          "reviewSuggestionCorrect": 40.0,
+          "reportedUnknown": 40.0
+        },
+        "variantCases": 40
+      },
+      "market": {
+        "cases": 335,
+        "outOfCatalogNames": 20,
+        "thresholds": {
+          "auto_accept": 0.85,
+          "review_min": 0.69,
+          "embedding_suggest": null
+        },
+        "vetoMargin": 9.0,
+        "maxOutOfCatalogScore": 0.6667,
+        "maxOutOfCatalogEmbedding": 0.6544,
+        "marginSweep": [
+          {
+            "margin": 0.0,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 33.4,
+            "variantsAutoAccepted": null
+          },
+          {
+            "margin": 0.02,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 30.1,
+            "variantsAutoAccepted": null
+          },
+          {
+            "margin": 0.05,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 27.5,
+            "variantsAutoAccepted": null
+          },
+          {
+            "margin": 0.08,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 23.6,
+            "variantsAutoAccepted": null
+          },
+          {
+            "margin": 0.12,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 21.2,
+            "variantsAutoAccepted": null
+          },
+          {
+            "margin": 0.2,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 18.2,
+            "variantsAutoAccepted": null
+          },
+          {
+            "margin": 9.0,
+            "autoAccept": 0.85,
+            "wrongAutoAccepts": 0,
+            "misspellingsToReview": 12.5,
+            "variantsAutoAccepted": null
+          }
+        ],
+        "semanticSuggestion": {
+          "floorFromOutOfCatalog": 0.75,
+          "unknownCasesConsidered": 1,
+          "netCorrectRescues": 0
+        },
+        "rapidfuzzOnly": {
+          "top1": 99.4,
+          "autoAccepted": 84.2,
+          "autoAcceptPrecision": 100.0,
+          "wrongAutoAccepts": 0,
+          "sentToReview": 15.5,
+          "reviewSuggestionCorrect": 96.2,
+          "reportedUnknown": 0.3,
+          "outOfCatalogGivenSuggestion": 0
+        },
+        "withEmbeddings": {
+          "top1": 99.4,
+          "autoAccepted": 87.2,
+          "autoAcceptPrecision": 100.0,
+          "wrongAutoAccepts": 0,
+          "sentToReview": 12.5,
+          "reviewSuggestionCorrect": 95.2,
+          "reportedUnknown": 0.3,
+          "outOfCatalogGivenSuggestion": 0
+        }
+      }
+    }
+  }
+}
