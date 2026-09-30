@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "react";
 import { detectLadderViolations } from "./anomaly";
+import { idbDelete, idbGet, idbSet } from "./idb";
 import { analyzeTable } from "./pipeline";
 import { buildCoverage, buildProfile } from "./profile";
 import { standardize } from "./standardize";
@@ -147,11 +148,23 @@ export function hydrateDraft() {
   if (hydrated || typeof window === "undefined") return;
   hydrated = true;
   if (draft) return;
+  void loadSaved().then((saved) => {
+    if (saved && !draft) commit({ ...saved, dirty: false });
+  });
+}
+
+async function loadSaved(): Promise<Draft | undefined> {
   try {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (saved) commit({ ...(JSON.parse(saved) as Draft), dirty: false });
+    const legacy = window.localStorage.getItem(STORAGE_KEY);
+    if (legacy) {
+      window.localStorage.removeItem(STORAGE_KEY);
+      const parsed = JSON.parse(legacy) as Draft;
+      await idbSet(STORAGE_KEY, parsed);
+      return parsed;
+    }
+    return await idbGet<Draft>(STORAGE_KEY);
   } catch {
-    window.localStorage.removeItem(STORAGE_KEY);
+    return undefined;
   }
 }
 
@@ -562,24 +575,29 @@ export function recheckAll(precomputed?: AnalysisResult) {
   });
 }
 
-export function saveDraft(): boolean {
+export async function saveDraft(): Promise<boolean> {
   if (!draft || typeof window === "undefined") return false;
-  const saved: Draft = { ...draft, savedAt: new Date().toISOString(), dirty: false };
+  const current = draft;
+  const savedAt = new Date().toISOString();
   try {
-    const compact = {
-      ...saved,
-      rows: saved.rows.map((r) => ({ ...r, record: { ...r.record, raw: {} } })),
-    };
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(compact));
+    await idbSet(STORAGE_KEY, {
+      ...current,
+      savedAt,
+      dirty: false,
+      rows: current.rows.map((r) => ({ ...r, record: { ...r.record, raw: {} } })),
+    });
   } catch {
     return false;
   }
-  commit(saved);
+  // Edits made while writing keep the draft dirty.
+  commit(
+    draft === current ? { ...current, savedAt, dirty: false } : draft && { ...draft, savedAt },
+  );
   return true;
 }
 
 export function discardDraft() {
-  if (typeof window !== "undefined") window.localStorage.removeItem(STORAGE_KEY);
+  if (typeof window !== "undefined") void idbDelete(STORAGE_KEY).catch(() => undefined);
   commit(null);
 }
 

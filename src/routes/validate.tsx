@@ -13,6 +13,7 @@ import {
 import { memo, useEffect, useMemo, useState, type KeyboardEvent } from "react";
 import { toast } from "sonner";
 import { AppShell, SeverityBadge } from "@/components/AppShell";
+import { pageTitle } from "@/lib/brand";
 import { EmptyState } from "@/components/minagri/visuals";
 import {
   AlertDialog,
@@ -62,13 +63,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/validate")({
   head: () => ({
     meta: [
-      { title: "Validate — MINAGRI Data Intelligence" },
+      { title: pageTitle("Validate") },
       {
         name: "description",
         content:
           "Review every uploaded row, fix or delete problems, confirm AI corrections, then upload.",
       },
-      { property: "og:title", content: "Validate — MINAGRI Data Intelligence" },
+      { property: "og:title", content: pageTitle("Validate") },
       {
         property: "og:description",
         content:
@@ -207,8 +208,8 @@ function ValidatePage() {
     : 0;
   const corrections = draft.edits.filter((e) => e.via !== "delete").length;
 
-  const onSave = () => {
-    if (saveDraft()) toast.success("Draft saved on this computer");
+  const onSave = async () => {
+    if (await saveDraft()) toast.success("Draft saved on this computer");
     else toast.error("The draft could not be saved. Browser storage may be full.");
   };
 
@@ -244,6 +245,7 @@ function ValidatePage() {
 
   return (
     <AppShell
+      fit
       title="Validate uploaded data"
       subtitle={`${draft.name} · ${groups.length.toLocaleString()} rows · ${summary.rows.toLocaleString()} prices`}
       actions={
@@ -255,7 +257,7 @@ function ValidatePage() {
                 ? `Draft saved ${new Date(draft.savedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
                 : ""}
           </span>
-          <Button variant="outline" onClick={onSave}>
+          <Button variant="outline" onClick={() => void onSave()}>
             <Save className="h-4 w-4" aria-hidden />
             Save draft
           </Button>
@@ -420,7 +422,7 @@ function ValidatePage() {
         </div>
       </div>
 
-      <div className="mt-3 overflow-hidden rounded-lg bg-card">
+      <div className="mt-3 overflow-hidden rounded-lg bg-card lg:flex lg:min-h-0 lg:flex-1 lg:flex-col">
         {shown.length === 0 ? (
           <div className="px-6 py-14 text-center">
             <Check className="mx-auto h-8 w-8 text-success" aria-hidden />
@@ -441,7 +443,7 @@ function ValidatePage() {
             </Button>
           </div>
         ) : (
-          <div className="max-h-[calc(100vh-15rem)] overflow-auto">
+          <div className="overflow-auto max-lg:max-h-[calc(100dvh-16rem)] lg:min-h-0 lg:flex-1">
             <table className="w-full min-w-[1040px] border-separate border-spacing-0 text-sm">
               <thead className="sticky top-0 z-20 text-left text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                 <tr className="[&>th]:border-b [&>th]:border-border [&>th]:bg-card [&>th]:px-2 [&>th]:py-2.5">
@@ -476,7 +478,7 @@ function ValidatePage() {
           </div>
         )}
         {visible.length > PAGE && (
-          <div className="flex items-center justify-between border-t px-3 py-2 text-xs">
+          <div className="flex shrink-0 items-center justify-between border-t px-3 py-2 text-xs">
             <span className="text-muted-foreground">
               {(current * PAGE + 1).toLocaleString()}–
               {Math.min(visible.length, (current + 1) * PAGE).toLocaleString()} of{" "}
