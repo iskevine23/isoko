@@ -1,0 +1,150 @@
+{
+  "generatedAt": "2026-09-30T11:58:17.847Z",
+  "data": {
+    "source": "Rwanda e-Soko export",
+    "date": "2026-09-28",
+    "pricedRows": 1096,
+    "commodities": 133,
+    "markets": 67
+  },
+  "priceModel": {
+    "algorithm": "Isolation Forest",
+    "trees": 100,
+    "subsample": 256,
+    "requestedSubsample": 256,
+    "features": [
+      "Versus same commodity and channel",
+      "Robust z-score",
+      "Versus this market's usual level",
+      "Versus this province's usual level",
+      "Price channel",
+      "Retail versus farm gate",
+      "Wholesale versus farm gate",
+      "Retail versus wholesale"
+    ],
+    "contamination": 0.025,
+    "threshold": 0.6168,
+    "trainingScores": {
+      "median": 0.3941,
+      "p90": 0.5143,
+      "p975": 0.6168,
+      "max": 0.7157
+    },
+    "baseline": {
+      "rows": 1096,
+      "forestFlags": 28,
+      "forestNew": 20,
+      "statisticalFlags": 47,
+      "ladderFlags": 0
+    },
+    "evaluation": {
+      "protocol": "8 rounds × 40 errors injected into copies of the real snapshot, one per market-commodity price set. A detection counts when any row of that price set is sent to review.",
+      "injected": 320,
+      "byType": [
+        {
+          "type": "Extra zero (×10)",
+          "injected": 80,
+          "forestRecall": 86.3,
+          "statisticalRecall": 60,
+          "ladderRuleRecall": 100,
+          "hybridRecall": 100
+        },
+        {
+          "type": "Missing zero (÷10)",
+          "injected": 80,
+          "forestRecall": 77.5,
+          "statisticalRecall": 53.8,
+          "ladderRuleRecall": 98.8,
+          "hybridRecall": 100
+        },
+        {
+          "type": "Price spike (+60%)",
+          "injected": 80,
+          "forestRecall": 56.3,
+          "statisticalRecall": 46.3,
+          "ladderRuleRecall": 76.3,
+          "hybridRecall": 96.3
+        },
+        {
+          "type": "Ladder inversion",
+          "injected": 80,
+          "forestRecall": 66.3,
+          "statisticalRecall": 41.3,
+          "ladderRuleRecall": 98.8,
+          "hybridRecall": 100
+        }
+      ],
+      "overall": {
+        "forestRecall": 71.6,
+        "statisticalRecall": 50.3,
+        "hybridRecall": 99.1
+      },
+      "untouchedFlagRate": {
+        "forest": 2.3,
+        "hybrid": 5.6
+      }
+    }
+  },
+  "entityMatcher": {
+    "algorithm": "Exact and fuzzy match ranks candidates; TF-IDF over character 2–4-grams fitted on the e-Soko catalog confirms or vetoes auto-acceptance",
+    "thresholds": {
+      "commodityAutoAccept": 0.9,
+      "marketAutoAccept": 0.88,
+      "commodityReviewMin": 0.55,
+      "marketReviewMin": 0.5
+    },
+    "evaluation": {
+      "protocol": "Every catalog name (English and Kinyarwanda for commodities, e-Soko spelling for markets) plus four misspellings each, and 15 names that are in neither registry.",
+      "commodity": {
+        "cases": 1330,
+        "usedTfidf": 57.6,
+        "modelsDisagreed": 5.3,
+        "withTfidfCheck": {
+          "top1": 97.4,
+          "autoAccepted": 42.6,
+          "autoAcceptPrecision": 100,
+          "sentToReview": 43.2,
+          "reviewSuggestionCorrect": 97.2,
+          "reportedUnknown": 14.1
+        },
+        "fuzzyOnly": {
+          "top1": 97.7,
+          "autoAccepted": 42.2,
+          "autoAcceptPrecision": 100,
+          "sentToReview": 29.8,
+          "reviewSuggestionCorrect": 97.7,
+          "reportedUnknown": 28
+        },
+        "outOfCatalog": {
+          "names": 15,
+          "givenSuggestion": 0
+        }
+      },
+      "market": {
+        "cases": 335,
+        "usedTfidf": 60,
+        "modelsDisagreed": 1.5,
+        "withTfidfCheck": {
+          "top1": 98.2,
+          "autoAccepted": 38.2,
+          "autoAcceptPrecision": 100,
+          "sentToReview": 49.9,
+          "reviewSuggestionCorrect": 98.2,
+          "reportedUnknown": 11.9
+        },
+        "fuzzyOnly": {
+          "top1": 98.2,
+          "autoAccepted": 37,
+          "autoAcceptPrecision": 100,
+          "sentToReview": 7.8,
+          "reviewSuggestionCorrect": 84.6,
+          "reportedUnknown": 55.2
+        },
+        "outOfCatalog": {
+          "names": 15,
+          "givenSuggestion": 0
+        }
+      }
+    }
+  }
+}
