@@ -20,6 +20,18 @@ export const PIPELINE_STAGES = [
   "Preparing review",
 ];
 
+/** Rows cleaned so far and the current stage; `percent` is null when progress cannot be measured. */
+export interface AnalysisProgress {
+  stage: string;
+  done: number;
+  total: number;
+  percent: number | null;
+}
+export type ProgressFn = (p: AnalysisProgress) => void;
+
+/** Share of the progress bar reached when each stage starts, from timings on a 167k-row upload. */
+const STAGE_START = { rows: 0, duplicates: 20, peers: 27, forest: 31, review: 66 } as const;
+
 const snapshot = snapshotData as EsokoSnapshot;
 export const SNAPSHOT_NAME = `e-Soko market prices — ${snapshot.date}`;
 
@@ -77,19 +89,30 @@ export function analyzeTable(
   datasetName: string,
   source: DatasetSource,
   parseErrors: string[] = [],
+  onProgress?: ProgressFn,
 ): AnalysisResult {
+  const total = rows.length;
+  const report = (stage: string, done: number, percent: number) =>
+    onProgress?.({ stage, done, total, percent });
   const analyzedAt = new Date().toISOString();
   const columns = detectColumns(headers);
-  const std = standardize(rows, columns, analyzedAt);
+  report("Cleaning and matching rows", 0, STAGE_START.rows);
+  const std = standardize(rows, columns, analyzedAt, (done) =>
+    report(
+      "Cleaning and matching rows",
+      done,
+      STAGE_START.rows + (done / Math.max(total, 1)) * (STAGE_START.duplicates - STAGE_START.rows),
+    ),
+  );
+  report("Checking duplicates", total, STAGE_START.duplicates);
+  const duplicates = detectDuplicates(std.records);
+  report("Comparing prices with peer markets", total, STAGE_START.peers);
   const statistical = detectPriceAnomalies(std.records);
+  const ladder = detectLadderViolations(std.records);
+  report("Scoring prices (Isolation Forest)", total, STAGE_START.forest);
   const forest = runIsolationForest(std.records, statistical);
-  const issues = [
-    ...std.issues,
-    ...detectDuplicates(std.records),
-    ...statistical,
-    ...detectLadderViolations(std.records),
-    ...forest.issues,
-  ];
+  report("Preparing review", total, STAGE_START.review);
+  const issues = [...std.issues, ...duplicates, ...statistical, ...ladder, ...forest.issues];
   return {
     datasetName,
     analyzedAt,

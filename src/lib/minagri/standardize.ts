@@ -50,7 +50,7 @@ const CHANNEL_MAP: Record<string, PriceChannel> = {
 
 export function parsePrice(value: string): number | null {
   if (!value) return null;
-  const cleaned = value.replace(/[^0-9.\-]/g, "");
+  const cleaned = value.replace(/[^0-9.-]/g, "");
   if (cleaned === "" || cleaned === "-" || cleaned === ".") return null;
   const n = Number(cleaned);
   return Number.isFinite(n) ? n : null;
@@ -122,6 +122,14 @@ export interface StandardizeOutput {
   embeddingRows: number;
 }
 
+type EntityIssue = Omit<Issue, "id" | "recordId">;
+interface EntityMatch {
+  value: string;
+  confidence: number;
+  embedded: boolean;
+  issue?: EntityIssue;
+}
+
 let issueSeq = 0;
 export function nextIssueId() {
   issueSeq += 1;
@@ -132,11 +140,15 @@ export function standardize(
   rows: Record<string, string>[],
   columns: Record<string, string | null>,
   analyzedAt: string,
+  onRows?: (done: number) => void,
 ): StandardizeOutput {
   const records: DataRecord[] = [];
   const issues: Issue[] = [];
   const lineage: LineageEntry[] = [];
   let embeddingRows = 0;
+  const matchCache = new Map<string, EntityMatch>();
+  const marketByName = new Map(MARKETS.map((m) => [m.name, m]));
+  const unitByCommodity = new Map(COMMODITIES.map((c) => [c.name, c.unit]));
 
   rows.forEach((raw, index) => {
     const rowNumber = index + 2;
@@ -173,13 +185,25 @@ export function standardize(
     const parsedDate = parseDate(rawDate);
     addTrace("date", rawDate, parsedDate ?? "", "ISO-8601 date normalisation");
 
-    // commodity + market: tiered catalog matching
+    // commodity + market: tiered catalog matching, once per distinct name
     const matchEntity = (kind: "commodity" | "market", rawValue: string) => {
+      const key = `${kind}|${rawValue}`;
+      let match = matchCache.get(key);
+      if (!match) {
+        match = resolveEntity(kind, rawValue);
+        matchCache.set(key, match);
+      }
+      if (match.embedded) embeddingRows += 1;
+      if (match.issue) issues.push({ ...match.issue, id: nextIssueId(), recordId: id });
+      return match;
+    };
+    const resolveEntity = (kind: "commodity" | "market", rawValue: string): EntityMatch => {
       const isMarket = kind === "market";
       const label = isMarket ? "Market" : "Commodity";
       let value = titleCase(normalizeText(rawValue));
       let confidence = 1;
       let embedded = false;
+      let issue: EntityIssue | undefined;
       if (!rawValue) return { value, confidence, embedded };
 
       const autoAccept = isMarket ? MARKET_AUTO_ACCEPT : COMMODITY_AUTO_ACCEPT;
@@ -188,9 +212,7 @@ export function standardize(
         ? undefined
         : ARCHIVED_COMMODITIES.get(normalizeText(rawValue).toLowerCase());
       if (archived) {
-        issues.push({
-          id: nextIssueId(),
-          recordId: id,
+        issue = {
           type: "ENTITY_MATCH",
           category: "match",
           severity: "medium",
@@ -205,14 +227,13 @@ export function standardize(
             "Confirm whether this product is still collected. If it is, restore it in the catalog; if not, stop collecting it.",
           method: "Exact lookup in the archived part of the e-Soko catalog",
           status: "open",
-        });
-        return { value: archived.name, confidence: 1, embedded };
+        };
+        return { value: archived.name, confidence: 1, embedded, issue };
       }
       const ranked = isMarket
         ? rankMarketName(rawValue)
         : rankEntityMatches(rawValue, commodityCandidates, 3, autoAccept);
       embedded = ranked.usedEmbedding;
-      if (embedded) embeddingRows += 1;
       const matches = ranked.matches;
       const top = matches[0];
       const method = embedded
@@ -228,9 +249,7 @@ export function standardize(
         confidence = top.score;
         if (ranked.ambiguous) {
           const tied = matches.filter((m) => top.score - m.score < TIE_MARGIN).map((m) => m.value);
-          issues.push({
-            id: nextIssueId(),
-            recordId: id,
+          issue = {
             type: "ENTITY_MATCH",
             category: "match",
             severity: "medium",
@@ -242,11 +261,9 @@ export function standardize(
             method,
             suggestion: { field: kind, value: top.value },
             status: "open",
-          });
+          };
         } else if (top.score < autoAccept) {
-          issues.push({
-            id: nextIssueId(),
-            recordId: id,
+          issue = {
             type: "ENTITY_MATCH",
             category: "match",
             severity: isMarket || top.score >= 0.78 ? "low" : "medium",
@@ -258,12 +275,10 @@ export function standardize(
             method,
             suggestion: { field: kind, value: top.value },
             status: "open",
-          });
+          };
         }
       } else {
-        issues.push({
-          id: nextIssueId(),
-          recordId: id,
+        issue = {
           type: "UNKNOWN_ENTITY",
           category: "match",
           severity: "high",
@@ -281,9 +296,9 @@ export function standardize(
             : "Correct the commodity name or add it to the catalog.",
           method,
           status: "open",
-        });
+        };
       }
-      return { value, confidence, embedded };
+      return { value, confidence, embedded, issue };
     };
 
     const rawCommodity = get("commodity");
@@ -313,7 +328,7 @@ export function standardize(
     );
 
     // geography derived from registry (authoritative)
-    const registry = MARKETS.find((m) => m.name === market);
+    const registry = marketByName.get(market);
     const rawDistrict = get("district");
     const rawProvince = get("province");
     const district = registry?.district ?? titleCase(normalizeText(rawDistrict));
@@ -456,7 +471,7 @@ export function standardize(
       });
     }
 
-    const expectedUnit = COMMODITIES.find((c) => c.name === commodity)?.unit;
+    const expectedUnit = unitByCommodity.get(commodity);
     if (expectedUnit && unit && VALID_UNITS.includes(unit) && unit !== expectedUnit) {
       issues.push({
         id: nextIssueId(),
@@ -477,6 +492,8 @@ export function standardize(
         status: "open",
       });
     }
+
+    if (onRows && ((index + 1) % 500 === 0 || index + 1 === rows.length)) onRows(index + 1);
   });
 
   return { records, issues, lineage, embeddingRows };
