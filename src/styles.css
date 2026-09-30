@@ -180,15 +180,26 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-display);
     letter-spacing: -0.025em;
     text-wrap: balance;
   }
 
-  h1 { line-height: 1.1; }
-  h2 { line-height: 1.15; }
-  h3 { line-height: 1.2; }
+  h1 {
+    line-height: 1.1;
+  }
+  h2 {
+    line-height: 1.15;
+  }
+  h3 {
+    line-height: 1.2;
+  }
 }
 
 @layer utilities {
@@ -254,12 +265,45 @@
   animation: bar-grow 0.55s ease;
 }
 
+/* Transform-only so the compositor keeps them moving while the main thread is busy. */
+@keyframes progress-slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+.progress-indeterminate {
+  animation: progress-slide 1.3s ease-in-out infinite;
+}
+
+@keyframes progress-sheen {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.progress-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.35), transparent);
+  animation: progress-sheen 1.6s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .page-rise,
-  .bar-grow {
+  .bar-grow,
+  .progress-indeterminate,
+  .progress-sheen::after {
     animation: none;
   }
 }
