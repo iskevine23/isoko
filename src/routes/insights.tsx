@@ -14,6 +14,7 @@ import {
   YAxis,
 } from "recharts";
 import { AppShell, Panel } from "@/components/AppShell";
+import { pageTitle } from "@/lib/brand";
 import { EmptyState } from "@/components/minagri/visuals";
 import { SearchSelect } from "@/components/ui/search-select";
 import { CHANNEL_LABEL } from "@/lib/minagri/catalog";
@@ -23,12 +24,12 @@ import { useAnalysis } from "@/lib/minagri/store";
 export const Route = createFileRoute("/insights")({
   head: () => ({
     meta: [
-      { title: "Insights — MINAGRI Data Intelligence" },
+      { title: pageTitle("Insights") },
       {
         name: "description",
         content: "Farm, wholesale, and retail prices across reporting markets.",
       },
-      { property: "og:title", content: "Insights — MINAGRI Data Intelligence" },
+      { property: "og:title", content: pageTitle("Insights") },
       {
         property: "og:description",
         content: "Farm, wholesale, and retail prices across reporting markets.",

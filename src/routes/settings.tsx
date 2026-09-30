@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { AppShell, Panel } from "@/components/AppShell";
+import { pageTitle } from "@/lib/brand";
 import { Button } from "@/components/ui/button";
 import { AI_API_URL, checkAiApi, type AiApiHealth } from "@/lib/minagri/ai-api";
 import { REGISTRY_NOTES } from "@/lib/minagri/catalog";
@@ -10,15 +11,15 @@ import { reloadSnapshot, useAnalysis } from "@/lib/minagri/store";
 export const Route = createFileRoute("/settings")({
   head: () => ({
     meta: [
-      { title: "Settings — MINAGRI Data Intelligence" },
+      { title: pageTitle("Settings") },
       {
         name: "description",
-        content: "Dataset session and how MINAGRI Data Intelligence processes files.",
+        content: "Dataset session and how e-biciro processes files.",
       },
-      { property: "og:title", content: "Settings — MINAGRI Data Intelligence" },
+      { property: "og:title", content: pageTitle("Settings") },
       {
         property: "og:description",
-        content: "Dataset session and how MINAGRI Data Intelligence processes files.",
+        content: "Dataset session and how e-biciro processes files.",
       },
     ],
   }),

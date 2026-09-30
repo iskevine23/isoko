@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { AppShell, SeverityBadge, Stat } from "@/components/AppShell";
+import { pageTitle } from "@/lib/brand";
 import { AiMark, EmptyState } from "@/components/minagri/visuals";
 import { Button } from "@/components/ui/button";
 import { issueCounts } from "@/lib/minagri/scoring";
@@ -22,9 +23,9 @@ export const Route = createFileRoute("/review")({
   },
   head: () => ({
     meta: [
-      { title: "Review Center — MINAGRI Data Intelligence" },
+      { title: pageTitle("Review Center") },
       { name: "description", content: "An inbox for agricultural data quality problems." },
-      { property: "og:title", content: "Review Center — MINAGRI Data Intelligence" },
+      { property: "og:title", content: pageTitle("Review Center") },
       { property: "og:description", content: "An inbox for agricultural data quality problems." },
     ],
   }),

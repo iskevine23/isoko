@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ClipboardCheck, Database, Inbox, LayoutDashboard, Menu, Upload, X } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { PRODUCT_NAME } from "@/lib/brand";
 import { draftSummary, hydrateDraft, useDraft } from "@/lib/minagri/draft";
 import { SOURCE_LABEL } from "@/lib/minagri/pipeline";
 import { issueCounts } from "@/lib/minagri/scoring";
@@ -20,21 +21,25 @@ const NAV: NavItem[] = [
   { to: "/review", label: "Review", icon: Inbox, reviewHome: true },
   { to: "/upload", label: "Upload", icon: Upload },
   { to: "/validate", label: "Validate", icon: ClipboardCheck, draftHome: true },
-  { to: "/dataset", label: "Clean data", icon: Database },
+  { to: "/dataset", label: "Dataset", icon: Database },
 ];
 
-function BrandLogo({ className }: { className?: string }) {
+function BrandMark({ compact = false }: { compact?: boolean }) {
   return (
-    <div className={cn("overflow-hidden rounded-lg bg-black", className)}>
-      <div className="relative w-full overflow-hidden" style={{ aspectRatio: "1370 / 553" }}>
-        <img
-          src="/logo.png"
-          alt="MINAGRI Data Platform — From raw data to trusted agricultural insights"
-          className="absolute max-w-none"
-          style={{ width: "112.1%", height: "185.2%", left: "-5.9%", top: "-41.6%" }}
-        />
-      </div>
-    </div>
+    <Link
+      to="/"
+      aria-label={`${PRODUCT_NAME} home`}
+      className={cn(
+        "block overflow-hidden rounded-lg bg-black outline-none focus-visible:ring-2 focus-visible:ring-accent-green",
+        compact ? "w-[9.5rem]" : "w-full",
+      )}
+    >
+      <img
+        src="/logo.png"
+        alt="e-biciro — Agricultural data platform. From raw data to trusted agricultural insights."
+        className="h-auto w-full"
+      />
+    </Link>
   );
 }
 
@@ -44,12 +49,15 @@ export function AppShell({
   subtitle,
   actions,
   children,
+  fit = false,
 }: {
   kicker?: string;
   title: string;
   subtitle?: string;
   actions?: ReactNode;
   children: ReactNode;
+  /** Keep the page inside the viewport and let the body fill the space under the title. */
+  fit?: boolean;
 }) {
   const { result, score } = useAnalysis();
   const openIssues = issueCounts(result.issues).open;
@@ -71,7 +79,7 @@ export function AppShell({
   const active = (item: NavItem) => location.pathname === item.to;
 
   const nav = (
-    <nav aria-label="Primary" className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 pb-4">
+    <nav aria-label="Primary" className="flex flex-col gap-1 px-3 pb-4">
       {NAV.map((item) => {
         const on = active(item);
         const Icon = item.icon;
@@ -104,19 +112,19 @@ export function AppShell({
   );
 
   return (
-    <div className="min-h-screen bg-background text-foreground lg:flex">
+    <div className={cn("min-h-dvh bg-background text-foreground", fit && "lg:h-dvh lg:overflow-hidden")}>
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-card focus:px-3 focus:py-2"
       >
         Skip to content
       </a>
-      <aside className="hidden w-[248px] shrink-0 flex-col bg-sidebar text-sidebar-foreground lg:flex lg:min-h-screen">
-        <div className="px-4 pb-4 pt-5">
-          <BrandLogo />
+      <aside className="fixed inset-y-0 left-0 z-40 hidden h-dvh w-[248px] flex-col bg-sidebar text-sidebar-foreground lg:flex">
+        <div className="shrink-0 px-4 pb-4 pt-5">
+          <BrandMark />
         </div>
         {nav}
-        <div className="border-t border-white/10 p-4 text-xs text-white/70">
+        <div className="mt-auto shrink-0 border-t border-white/10 p-4 text-xs text-white/70">
           <div className="font-medium text-white">Active dataset</div>
           <div className="mt-1 line-clamp-2">{result.datasetName}</div>
           <div className="mt-2">
@@ -128,7 +136,7 @@ export function AppShell({
       </aside>
 
       <div className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-sidebar px-4 py-3 text-white lg:hidden">
-        <BrandLogo className="w-36" />
+        <BrandMark compact />
         <button
           type="button"
           className="rounded-lg p-2 hover:bg-white/10"
@@ -146,9 +154,17 @@ export function AppShell({
         </div>
       )}
 
-      <main id="main" className="min-w-0 flex-1 px-4 py-6 md:px-8 md:py-8">
-        <div className="page-rise mx-auto max-w-6xl">
-          <div className="flex flex-wrap items-end justify-between gap-4">
+      <main
+        id="main"
+        className={cn("min-w-0 lg:pl-[248px]", fit && "lg:flex lg:h-dvh lg:flex-col lg:overflow-hidden")}
+      >
+        <div
+          className={cn(
+            "page-rise mx-auto w-full px-4 py-6 md:px-8 md:py-8",
+            fit ? "flex max-w-none flex-1 flex-col lg:h-full lg:min-h-0 lg:overflow-hidden" : "max-w-6xl",
+          )}
+        >
+          <div className="flex shrink-0 flex-wrap items-end justify-between gap-4">
             <div>
               {kicker && <p className="text-eyebrow">{kicker}</p>}
               <h1 className="text-page-title mt-1">{title}</h1>
@@ -160,7 +176,7 @@ export function AppShell({
             </div>
             {actions}
           </div>
-          <div className="mt-6">{children}</div>
+          <div className={cn("mt-6", fit && "lg:flex lg:min-h-0 lg:flex-1 lg:flex-col")}>{children}</div>
         </div>
       </main>
     </div>

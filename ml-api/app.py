@@ -1,4 +1,4 @@
-"""MINAGRI Python AI API (Flask).
+"""e-biciro Python AI API (Flask).
 
 Run:  .venv/bin/python app.py            (http://127.0.0.1:5001)
       .venv/bin/gunicorn -w 1 -b 0.0.0.0:5001 app:app   (production)

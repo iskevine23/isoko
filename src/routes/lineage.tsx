@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
+import { pageTitle } from "@/lib/brand";
 import { EmptyState, StoryPipeline } from "@/components/minagri/visuals";
 import { Button } from "@/components/ui/button";
 import { issueCounts } from "@/lib/minagri/scoring";
@@ -9,9 +10,9 @@ import { useAnalysis } from "@/lib/minagri/store";
 export const Route = createFileRoute("/lineage")({
   head: () => ({
     meta: [
-      { title: "Data Lineage — MINAGRI Data Intelligence" },
+      { title: pageTitle("Data Lineage") },
       { name: "description", content: "What changed between the raw file and the trusted dataset." },
-      { property: "og:title", content: "Data Lineage — MINAGRI Data Intelligence" },
+      { property: "og:title", content: pageTitle("Data Lineage") },
       { property: "og:description", content: "What changed between the raw file and the trusted dataset." },
     ],
   }),

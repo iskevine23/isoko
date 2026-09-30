@@ -1,4 +1,4 @@
-"""Trains and evaluates the MINAGRI AI models on the real e-Soko snapshot.
+"""Trains and evaluates the e-biciro AI models on the real e-Soko snapshot.
 
     .venv/bin/python train.py            # train, evaluate, write models/
     .venv/bin/python train.py --no-st    # use the TF-IDF fallback instead of the Sentence Transformer

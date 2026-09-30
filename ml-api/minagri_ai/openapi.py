@@ -533,10 +533,10 @@ def build_spec(server_url: str) -> dict:
     return {
         "openapi": "3.1.0",
         "info": {
-            "title": "MINAGRI Python AI API",
+            "title": "e-biciro Python AI API",
             "version": "1.0.0",
             "description": (
-                "Machine-learning services behind the MINAGRI data platform.\n\n"
+                "Machine-learning services behind the e-biciro platform.\n\n"
                 "- **Matching engine**: RapidFuzz plus a multilingual Sentence Transformer "
                 "(TF-IDF fallback) map commodity and market names to the e-Soko catalog.\n"
                 "- **Anomaly engine**: price rules, robust z-score and IQR, pricing ladder, and a scikit-learn "
@@ -563,7 +563,7 @@ def swagger_html(spec_url: str) -> str:
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MINAGRI Python AI API — docs</title>
+  <title>e-biciro Python AI API — docs</title>
   <link rel="stylesheet" href="{cdn}/swagger-ui.css" />
 </head>
 <body>

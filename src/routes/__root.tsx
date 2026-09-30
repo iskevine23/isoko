@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { Toaster } from "../components/ui/sonner";
 import appCss from "../styles.css?url";
+import { PRODUCT_NAME, PRODUCT_TAGLINE } from "../lib/brand";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -78,14 +79,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "MINAGRI Data Intelligence" },
-      { name: "description", content: "From raw agricultural data to trusted insights." },
-      { name: "author", content: "MINAGRI" },
-      { property: "og:title", content: "MINAGRI Data Intelligence" },
-      { property: "og:description", content: "From raw agricultural data to trusted insights." },
+      { title: PRODUCT_NAME },
+      { name: "description", content: PRODUCT_TAGLINE },
+      { name: "author", content: PRODUCT_NAME },
+      { property: "og:title", content: PRODUCT_NAME },
+      { property: "og:description", content: PRODUCT_TAGLINE },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "/logo.png" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:image", content: "/logo.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -98,8 +100,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/logo.png", type: "image/png" },
-      { rel: "apple-touch-icon", href: "/logo.png" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/favicon.png" },
     ],
   }),
   shellComponent: RootShell,

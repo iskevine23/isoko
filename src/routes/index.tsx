@@ -22,6 +22,7 @@ import {
   YAxis,
 } from "recharts";
 import { AppShell, Panel } from "@/components/AppShell";
+import { pageTitle } from "@/lib/brand";
 import { DraftBanner } from "@/components/minagri/DraftBanner";
 import { SearchSelect } from "@/components/ui/search-select";
 import { Button } from "@/components/ui/button";
@@ -36,12 +37,12 @@ import type { AnalysisResult, DataRecord } from "@/lib/minagri/types";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dashboard — MINAGRI Data Intelligence" },
+      { title: pageTitle("Dashboard") },
       {
         name: "description",
         content: "Clean agricultural price statistics, and a summary when review is still pending.",
       },
-      { property: "og:title", content: "Dashboard — MINAGRI Data Intelligence" },
+      { property: "og:title", content: pageTitle("Dashboard") },
       {
         property: "og:description",
         content: "Clean agricultural price statistics, and a summary when review is still pending.",
@@ -174,7 +175,7 @@ function Dashboard() {
 
   const downloadClean = () =>
     downloadFile(
-      "minagri-clean.csv",
+      "e-biciro-clean.csv",
       toCsv(
         [
           "date",
