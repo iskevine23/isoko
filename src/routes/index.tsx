@@ -26,7 +26,9 @@ import { pageTitle } from "@/lib/brand";
 import { DraftBanner } from "@/components/minagri/DraftBanner";
 import { SearchSelect } from "@/components/ui/search-select";
 import { Button } from "@/components/ui/button";
-import { CHANNEL_LABEL } from "@/lib/minagri/catalog";
+import { CHANNEL_LABEL, MARKETS } from "@/lib/minagri/catalog";
+import { RwandaPriceMap } from "@/components/minagri/RwandaPriceMap";
+import { matchProvince, projectRwanda, RWANDA_PROVINCES } from "@/lib/minagri/rwanda-map";
 import { downloadFile, toCsv } from "@/lib/minagri/csv";
 import { MODEL_CARD } from "@/lib/minagri/ml/price-model";
 import { issueCounts } from "@/lib/minagri/scoring";
@@ -97,6 +99,8 @@ function Dashboard() {
   }, [clean]);
   const [picked, setPicked] = useState("");
   const commodity = picked && commodities.includes(picked) ? picked : (commodities[0] ?? "");
+  const [province, setProvince] = useState<string | null>(null);
+  const [mapChannel, setMapChannel] = useState<(typeof CHANNELS)[number]>("retail");
 
   const markets = useMemo(() => new Set(clean.map((r) => r.market)).size, [clean]);
   const coveragePct = Math.round(
@@ -107,6 +111,7 @@ function Dashboard() {
     const byDate = new Map<string, Record<string, number[]>>();
     for (const row of clean) {
       if (row.commodity !== commodity || !row.date) continue;
+      if (province && matchProvince(row.province) !== province) continue;
       const bucket = byDate.get(row.date) ?? {};
       (bucket[row.channel] ??= []).push(row.price!);
       byDate.set(row.date, bucket);
@@ -117,13 +122,18 @@ function Dashboard() {
       wholesale: values.wholesale ? Math.round(median(values.wholesale)) : null,
       retail: values.retail ? Math.round(median(values.retail)) : null,
     }));
-  }, [clean, commodity]);
+  }, [clean, commodity, province]);
 
   const ladder = useMemo(
     () =>
       CHANNELS.map((channel) => {
         const values = clean
-          .filter((r) => r.commodity === commodity && r.channel === channel)
+          .filter(
+            (r) =>
+              r.commodity === commodity &&
+              r.channel === channel &&
+              (!province || matchProvince(r.province) === province),
+          )
           .map((r) => r.price!);
         return {
           channel,
@@ -131,8 +141,61 @@ function Dashboard() {
           median: values.length ? Math.round(median(values)) : null,
         };
       }),
-    [clean, commodity],
+    [clean, commodity, province],
   );
+
+  const priceUnit =
+    clean.find((r) => r.commodity === commodity && r.channel === mapChannel && r.unit)?.unit ??
+    clean.find((r) => r.commodity === commodity && r.unit)?.unit ??
+    "";
+
+  const priceMap = useMemo(() => {
+    const prices = new Map<string, number[]>();
+    const marketSets = new Map<string, Set<string>>();
+    const byMarket = new Map<string, { province: string; prices: number[] }>();
+    for (const row of clean) {
+      if (row.commodity !== commodity || row.channel !== mapChannel || row.price == null) continue;
+      const name = matchProvince(row.province);
+      if (!name) continue;
+      const list = prices.get(name) ?? [];
+      list.push(row.price);
+      prices.set(name, list);
+      const seen = marketSets.get(name) ?? new Set<string>();
+      seen.add(row.market);
+      marketSets.set(name, seen);
+      const bucket = byMarket.get(row.market) ?? { province: name, prices: [] };
+      bucket.prices.push(row.price);
+      byMarket.set(row.market, bucket);
+    }
+    const located = new Map(MARKETS.map((m) => [m.name.toLowerCase(), m]));
+    const dots = [];
+    for (const [market, bucket] of byMarket) {
+      const info = located.get(market.toLowerCase());
+      if (!info) continue;
+      const [x, y] = projectRwanda(info.lng, info.lat);
+      dots.push({
+        name: market,
+        province: bucket.province,
+        district: info.district,
+        x,
+        y,
+        median: Math.round(median(bucket.prices)),
+        observations: bucket.prices.length,
+      });
+    }
+    return {
+      provinces: RWANDA_PROVINCES.map((shape) => {
+        const values = prices.get(shape.name) ?? [];
+        return {
+          name: shape.name,
+          median: values.length ? Math.round(median(values)) : null,
+          observations: values.length,
+          markets: marketSets.get(shape.name)?.size ?? 0,
+        };
+      }),
+      dots,
+    };
+  }, [clean, commodity, mapChannel]);
 
   const mix = CHANNELS.map((channel) => ({
     channel,
@@ -354,10 +417,66 @@ function Dashboard() {
         />
       </div>
 
+      <div className="mt-4">
+        <Panel
+          title={commodity ? `${commodity} across Rwanda` : "Prices across Rwanda"}
+          action={
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <div
+                className="flex rounded-md border border-border p-0.5"
+                role="group"
+                aria-label="Price channel"
+              >
+                {CHANNELS.map((channel) => (
+                  <button
+                    key={channel}
+                    type="button"
+                    aria-pressed={mapChannel === channel}
+                    onClick={() => setMapChannel(channel)}
+                    className={`rounded-[5px] px-2.5 py-1 text-xs font-medium ${
+                      mapChannel === channel
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {CHANNEL_LABEL[channel]}
+                  </button>
+                ))}
+              </div>
+              {commodities.length > 0 && (
+                <SearchSelect
+                  aria-label="Commodity"
+                  value={commodity}
+                  onChange={setPicked}
+                  options={commodities.map((name) => ({ value: name, label: name }))}
+                  searchPlaceholder="Search commodity…"
+                  className="h-9 w-52"
+                />
+              )}
+            </div>
+          }
+        >
+          {commodity ? (
+            <RwandaPriceMap
+              commodity={commodity}
+              unit={priceUnit}
+              provinces={priceMap.provinces}
+              dots={priceMap.dots}
+              selected={province}
+              onSelect={setProvince}
+            />
+          ) : (
+            <Empty text="No clean prices yet." />
+          )}
+        </Panel>
+      </div>
+
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
         <Panel
           className="lg:col-span-2"
-          title="Median price over time"
+          title={
+            province ? `Median price over time · ${province.replace(" Province", "")}` : "Median price over time"
+          }
           action={
             commodities.length > 0 ? (
               <SearchSelect
@@ -372,7 +491,13 @@ function Dashboard() {
           }
         >
           {trend.length === 0 ? (
-            <Empty text="No clean prices for this commodity yet." />
+            <Empty
+              text={
+                province
+                  ? `No clean prices for ${commodity} in ${province}.`
+                  : "No clean prices for this commodity yet."
+              }
+            />
           ) : (
             <>
               <div className="h-64">
@@ -424,7 +549,13 @@ function Dashboard() {
           )}
         </Panel>
 
-        <Panel title={commodity ? `Price ladder · ${commodity}` : "Price ladder"}>
+        <Panel
+          title={
+            commodity
+              ? `Price ladder · ${commodity}${province ? ` · ${province.replace(" Province", "")}` : ""}`
+              : "Price ladder"
+          }
+        >
           <ol className="space-y-2">
             {ladder.map((step, i) => {
               const prev = ladder[i - 1];
