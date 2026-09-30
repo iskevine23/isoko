@@ -1,5 +1,6 @@
 import { AMBIGUOUS_LOCAL_NAMES } from "./catalog";
 import { matrixToTable, parseCsv, sniffDelimiter, type ParsedCsv } from "./csv";
+import { DISTRICTS } from "./districts";
 import { esokoToTable, isEsokoExport } from "./esoko";
 import { parseDate, parsePrice } from "./standardize";
 
@@ -474,6 +475,31 @@ const singular = (norm: string) =>
     .map((t) => (t.length > 3 && t.endsWith("s") && !t.endsWith("ss") ? t.slice(0, -1) : t))
     .join("_");
 
+const DISTRICT_NAMES = new Set(DISTRICTS.map((d) => d.name.toLowerCase()));
+const PROVINCE_NAMES = new Set([
+  "kigali",
+  "southern",
+  "western",
+  "northern",
+  "eastern",
+  "south",
+  "west",
+  "north",
+  "east",
+]);
+const provinceKey = (v: string) =>
+  v
+    .toLowerCase()
+    .replace(/\b(province|city|intara|of)\b/g, "")
+    .replace(/[^a-z]/g, "");
+
+/** Share of values that are Rwandan district names and province names, so "region" columns map by content. */
+function geographyShares(values: string[]) {
+  const district = values.filter((v) => DISTRICT_NAMES.has(v.trim().toLowerCase())).length;
+  const province = values.filter((v) => PROVINCE_NAMES.has(provinceKey(v))).length;
+  return { district: district / values.length, province: province / values.length };
+}
+
 function headerScore(field: Field, header: string): number {
   const norm = singular(normHeader(header));
   const tokens = norm.split("_");
@@ -507,8 +533,15 @@ export function suggestMapping(table: ParsedCsv): ColumnMapping {
     const numeric =
       values.filter((v) => parsePrice(v) !== null && /^[\s\d.,\-RWFrwf]+$/.test(v)).length /
       values.length;
+    const geo = geographyShares(values);
     for (const { key: field } of FIELDS) {
-      const base = headerScore(field, header);
+      let base = headerScore(field, header);
+      if (field === "district" || field === "province") {
+        const own = field === "district" ? geo.district : geo.province;
+        const other = field === "district" ? geo.province : geo.district;
+        if (own >= 0.6) base = Math.max(base, 2.8);
+        else if (other >= 0.6) continue;
+      }
       if (!base) continue;
       if (field === "price" && numeric < 0.7) continue;
       if (
