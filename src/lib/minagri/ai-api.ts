@@ -1,5 +1,6 @@
+import { analyzeInBackground } from "./analyze-worker";
+import type { ProgressFn } from "./pipeline";
 import { detectDuplicates } from "./dedupe";
-import { analyzeTable } from "./pipeline";
 import { buildProfile } from "./profile";
 import { detectColumns, standardize } from "./standardize";
 import type {
@@ -15,6 +16,9 @@ import type {
 export const AI_API_URL =
   (import.meta.env.VITE_AI_API_URL as string | undefined)?.replace(/\/$/, "") ??
   "http://127.0.0.1:5001";
+
+/** Larger uploads would exceed the API's request size and the 60 s timeout, so they run in the browser. */
+const API_MAX_ROWS = 50_000;
 
 /** Findings the Python engines own; the browser keeps completeness, date and duplicate checks. */
 const PYTHON_OWNED = new Set<Issue["type"]>([
@@ -178,18 +182,33 @@ export async function analyzePreferApi(
   datasetName: string,
   source: DatasetSource,
   parseErrors: string[] = [],
+  onProgress?: ProgressFn,
 ): Promise<{ result: AnalysisResult; notice?: string }> {
+  const inBrowser = () =>
+    analyzeInBackground(headers, rows, datasetName, source, parseErrors, onProgress);
+  if (rows.length > API_MAX_ROWS) {
+    return {
+      result: await inBrowser(),
+      notice: `${rows.length.toLocaleString()} rows is above the Python AI API's ${API_MAX_ROWS.toLocaleString()}-row request limit. The in-browser models were used.`,
+    };
+  }
   if (!(await checkAiApi())) {
     return {
-      result: analyzeTable(headers, rows, datasetName, source, parseErrors),
+      result: await inBrowser(),
       notice: `Python AI API not reachable at ${AI_API_URL}. The in-browser models were used.`,
     };
   }
   try {
+    onProgress?.({
+      stage: "Running the Python AI API models",
+      done: 0,
+      total: rows.length,
+      percent: null,
+    });
     return { result: await analyzeWithAiApi(headers, rows, datasetName, source, parseErrors) };
   } catch (e) {
     return {
-      result: analyzeTable(headers, rows, datasetName, source, parseErrors),
+      result: await inBrowser(),
       notice: `The Python AI API failed (${e instanceof Error ? e.message : "unknown error"}). The in-browser models were used.`,
     };
   }
