@@ -50,7 +50,7 @@ async function claude(q, key) {
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
-  const gKey = process.env.GEMINI_API_KEY, aKey = process.env.ANTHROPIC_API_KEY;
+  const gKey = process.env.GEMINI_API_KEY || process.env.Gemini_API, aKey = process.env.ANTHROPIC_API_KEY;
   if (!gKey && !aKey) return res.status(503).json({ error: "AI mode not configured" });
   const q = req.body && req.body.question;
   if (typeof q !== "string" || !q.trim() || q.length > 300)
