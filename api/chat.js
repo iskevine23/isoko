@@ -26,7 +26,7 @@ async function gemini(q, key) {
       }),
     }
   );
-  if (!r.ok) return null;
+  if (!r.ok) { console.error("Gemini error", r.status, (await r.text()).slice(0, 300)); return null; }
   const j = await r.json();
   const parts = (j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts) || [];
   return parts.map((p) => p.text || "").join("\n").trim() || null;
@@ -43,7 +43,7 @@ async function claude(q, key) {
       messages: [{ role: "user", content: q }],
     }),
   });
-  if (!r.ok) return null;
+  if (!r.ok) { console.error("Claude error", r.status, (await r.text()).slice(0, 300)); return null; }
   const j = await r.json();
   return (j.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n").trim() || null;
 }
