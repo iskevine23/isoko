@@ -48,6 +48,13 @@ select{font:inherit;padding:7px 10px;border-radius:8px;border:1.5px solid var(--
 .ask{display:flex;gap:8px}.ask input{flex:1;font:inherit;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink);min-width:0}
 .ask button{border:0;background:var(--amber);color:#fff;border-radius:10px;padding:0 18px;font-weight:600}
 .sug{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.sug button{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:5px 12px;font-size:14px}
+
+.phone{width:280px;max-width:100%;margin:12px auto 0;background:#22282a;border-radius:30px;padding:16px 14px 14px}
+.scr{background:#cfe8c5;color:#14301a;font:14px/1.35 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;min-height:230px;padding:10px;border-radius:6px}
+.pin{display:flex;gap:6px;margin-top:8px}.pin input{flex:1;min-width:0;font:16px monospace;padding:8px;border-radius:6px;border:0;text-align:center}
+.pin button{flex:1;border:0;border-radius:6px;padding:8px;font-weight:600;background:#e6ebe7;color:#22282a}.pin button:disabled,.pin input:disabled{opacity:.45}
+.pin .call{background:#2c8a4a;color:#fff}.pin .end{background:#b3402f;color:#fff}
+.sms{max-width:320px;margin:12px auto 0;min-height:10px}
 </style></head><body><div class="w">
 <h1>Isoko</h1><p class="sub">Compare market prices before you sell or buy. Rwanda, retail prices per kg.</p>
 <div class="chips" id="chips" role="group" aria-label="Choose a crop"></div>
@@ -57,6 +64,12 @@ select{font:inherit;padding:7px 10px;border-radius:8px;border:1.5px solid var(--
 <div class="card"><div class="row" style="margin-top:0"><h2 style="margin:0">All markets</h2><label class="mute">District <select id="dist"></select></label></div>
 <div class="tw"><table><thead><tr><th>Market</th><th class="n">RWF/kg</th><th class="n">vs middle</th><th class="n">Next month</th></tr></thead><tbody id="tb"></tbody></table></div></div>
 <div class="card"><h2>Time of year</h2><div class="mute">Usual price compared with the yearly average, by month.</div><svg id="sea" viewBox="0 0 700 170" role="img" aria-label="Seasonal price pattern"></svg></div>
+<div class="card"><h2>Feature phone demo: USSD and SMS</h2>
+<div class="mute"><b>Simulation only. This is not a live service.</b> It shows how someone without a smartphone could check a price: dial a code, pick a crop and a market, get the price by SMS. The code *123# is an example. A real service needs a shortcode from a telecom operator.</div>
+<div class="phone"><div class="scr" id="scr" role="log" aria-live="polite">Press Call to dial *123#</div>
+<form class="pin" id="uform"><input id="uin" inputmode="numeric" maxlength="2" aria-label="Type your choice" disabled><button id="usend" disabled>Send</button></form>
+<div class="pin"><button type="button" class="call" id="ucall">Call *123#</button><button type="button" class="end" id="uend">End</button></div></div>
+<div class="sms" id="sms" aria-live="polite"></div></div>
 <div class="card chat"><h2>Ask Isoko</h2><div class="mute">Ask about a crop, a market or a district. Try English or a crop name in Kinyarwanda.</div>
 <div class="msgs" id="msgs" aria-live="polite"></div>
 <form class="ask" id="ask"><label for="q" style="position:absolute;left:-9999px">Your question</label><input id="q" maxlength="200" placeholder="e.g. Where are beans cheapest?" autocomplete="off"><button type="submit">Ask</button></form>
@@ -128,4 +141,37 @@ say(answer(q),"b","From the price data")}
 $("ask").onsubmit=e=>{e.preventDefault();const q=$("q").value.trim();if(q){$("q").value="";ask(q)}};
 ["Where are potatoes cheapest?","Where can I sell beans?","Will maize prices rise?","When are beans dearest?"].forEach(t=>{const b=document.createElement("button");b.type="button";b.textContent=t;b.onclick=()=>ask(t);$("sug").appendChild(b)});
 say("Muraho! Ask me about prices for potatoes, beans, maize or maize flour.","b");
+
+//USSD-START
+const MN={January:"01",February:"02",March:"03",April:"04",May:"05",June:"06",July:"07",August:"08",September:"09",October:"10",November:"11",December:"12"};
+const U={en:{crop:"Choose crop",dist:"Choose district",mkt:"Choose market",back:"0 Back",bad:"Invalid choice.",done:"Price sent by SMS. Thank you.",
+sms:(c,m,d,p,md,l)=>"Isoko: "+c+", "+m+" ("+d+"): "+p+" RWF/kg ("+l+"). Middle price: "+md+". Source: WFP survey."},
+rw:{crop:"Hitamo igihingwa",dist:"Hitamo akarere",mkt:"Hitamo isoko",back:"0 Subira inyuma",bad:"Ihitamo ritari ryo.",done:"Igiciro cyoherejwe kuri SMS. Murakoze.",
+sms:(c,m,d,p,md,l)=>"Isoko: "+c+", "+m+" ("+d+"): "+p+" Frw/kg ("+l+"). Igiciro cy'hagati: "+md+". Amakuru: WFP."}};
+const CN={en:lab,rw:{"Potatoes (Irish)":"Ibirayi","Beans (dry)":"Ibishyimbo","Maize":"Ibigori","Maize flour":"Ifu y'ibigori"}};
+let S={step:"idle"};
+const opts=a=>a.map((x,i)=>(i+1)+" "+x).join("\n");
+const uDists=()=>[...new Set(D[S.crop].mk.map(m=>m.d))].sort();
+const uMkts=()=>D[S.crop].mk.filter(m=>m.d===S.dist).sort((a,b)=>a.m.localeCompare(b.m)).slice(0,9);
+function menu(){const u=U[S.lang||"en"];
+if(S.step==="lang")return "Choose language / Hitamo ururimi\n1 English\n2 Ikinyarwanda";
+if(S.step==="crop")return u.crop+"\n"+opts(Object.keys(D).map(k=>CN[S.lang][k]))+"\n"+u.back;
+if(S.step==="dist")return u.dist+"\n"+opts(uDists())+"\n"+u.back;
+if(S.step==="mkt")return u.mkt+" ("+S.dist+")\n"+opts(uMkts().map(m=>m.m))+"\n"+u.back;
+return u.done}
+function ussdStart(){S={step:"lang"};return {screen:menu()}}
+function ussdInput(v){const n=parseInt(v,10),u=U[S.lang||"en"];let sms=null;
+const bad=()=>({screen:u.bad+"\n\n"+menu()});
+if(S.step==="lang"){if(n!==1&&n!==2)return bad();S.lang=n===1?"en":"rw";S.step="crop";return {screen:menu()}}
+if(S.step==="crop"){const ks=Object.keys(D);if(n===0){S.step="lang";return {screen:menu()}}if(!(n>=1&&n<=ks.length))return bad();S.crop=ks[n-1];S.step="dist";return {screen:menu()}}
+if(S.step==="dist"){const ds=uDists();if(n===0){S.step="crop";return {screen:menu()}}if(!(n>=1&&n<=ds.length))return bad();S.dist=ds[n-1];S.step="mkt";return {screen:menu()}}
+if(S.step==="mkt"){const ms=uMkts();if(n===0){S.step="dist";return {screen:menu()}}if(!(n>=1&&n<=ms.length))return bad();const m=ms[n-1],c=D[S.crop],[mo,yr]=c.last.split(" ");
+sms=u.sms(CN[S.lang][S.crop],m.m,m.d,fmt(m.p),fmt(Math.round(med(c.mk.map(x=>x.p)))),MN[mo]+"/"+yr);S.step="done";return {screen:menu(),sms}}
+return {screen:u.done}}
+//USSD-END
+function uUI(on){$("uin").disabled=!on;$("usend").disabled=!on;if(on)$("uin").focus()}
+$("ucall").onclick=()=>{$("sms").innerHTML="";$("scr").textContent=ussdStart().screen;uUI(true)};
+$("uend").onclick=()=>{S={step:"idle"};$("scr").textContent="Session ended. Press Call to dial *123#";uUI(false)};
+$("uform").onsubmit=e=>{e.preventDefault();const v=$("uin").value.trim();if(!v)return;$("uin").value="";const r=ussdInput(v);$("scr").textContent=r.screen;
+if(r.sms){uUI(false);setTimeout(()=>{const d=document.createElement("div");d.className="msg b";d.textContent=r.sms;const s=document.createElement("small");s.textContent="SMS from ISOKO (simulated)";d.appendChild(s);$("sms").appendChild(d)},1200)}};
 </script></body></html>
