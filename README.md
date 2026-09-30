@@ -1,32 +1,24 @@
-# Isoko: Rwanda market prices
+# Pixel Perfect
 
-Price comparison page + chatbot built from WFP Rwanda retail price data.
+Implement exactly the screenshot and nothing else
 
-- `index.html`: the whole app (data is embedded)
-- `data.json`: the same data, used by the optional AI function
-- `api/chat.js`: optional AI mode (Vercel serverless function)
+This project was built with [Lovable](https://lovable.dev).
 
-The chatbot works without any key (built-in answers from the data).
-AI mode only turns on if `ANTHROPIC_API_KEY` is set on Vercel.
+## Build with Lovable
 
-## Put it on GitHub
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/c1ceb517-4594-4c54-a40b-d54d173ef855).
 
+- **Ship faster**: describe what you want to build and Lovable handles the code.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+
+## Development
+
+Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+
+```sh
+git clone <this-repository-url>
+cd <repository-name>
+npm i
+npm run dev
 ```
-git init
-git add .
-git commit -m "Isoko market price app"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/isoko.git
-git push -u origin main
-```
-(Create an empty repo named `isoko` on github.com first.)
-
-## Deploy on Vercel
-
-1. vercel.com > Add New > Project > import the `isoko` repo.
-2. Leave the settings as they are and click Deploy.
-3. Optional AI mode: Project > Settings > Environment Variables, add
-   `ANTHROPIC_API_KEY`, then redeploy. Set a spending limit on your API
-   account first: anyone who finds your page can use the chat.
-
-Never put the API key in index.html or commit it to GitHub.
