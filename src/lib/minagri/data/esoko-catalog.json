@@ -1,0 +1,1961 @@
+{
+ "source": "Rwanda e-Soko export, 28 September 2026",
+ "commodities": [
+  {
+   "id": 1,
+   "code": "203",
+   "name": "Fish - Tilapia",
+   "local": "IFI - Tilapia",
+   "french": "Poisson - Tilapia",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 5300
+  },
+  {
+   "id": 2,
+   "code": "202",
+   "name": "Fish - Tomson",
+   "local": "IFI - Tomson",
+   "french": "Poisson - Tomson",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 3750
+  },
+  {
+   "id": 3,
+   "code": "201",
+   "name": "Rice Thailand",
+   "local": "Umuceri Thailand",
+   "french": "Riz Thailand",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1240
+  },
+  {
+   "id": 4,
+   "code": "200",
+   "name": "Rice Pakistan",
+   "local": "Umuceri Pakistani",
+   "french": "Riz Pakistan",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1270
+  },
+  {
+   "id": 5,
+   "code": "163",
+   "name": "Pig finisher feed",
+   "local": "Ibiryo amatungo Pig finisher feed",
+   "french": "Pig finisher feed",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 680
+  },
+  {
+   "id": 6,
+   "code": "162",
+   "name": "Maize Bran",
+   "local": "Ibiryo by'amatungo Maize Bran",
+   "french": "Maize Bran",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 350
+  },
+  {
+   "id": 7,
+   "code": "161",
+   "name": "Layer Grow Mash",
+   "local": "Ibiryo amatungo Layer Grow Mash",
+   "french": "Layer Grow Mash",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 750
+  },
+  {
+   "id": 8,
+   "code": "160",
+   "name": "Layer Starter Mash",
+   "local": "Ibiryo amatungo Layer Starter Mash",
+   "french": "Layer Starter Mash",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 850
+  },
+  {
+   "id": 9,
+   "code": "159",
+   "name": "Pre-Layer mash",
+   "local": "Ibiryo amatungo Pre-Layer mash",
+   "french": "Pre-Layer mash",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 10,
+   "code": "158",
+   "name": "Gaz",
+   "local": "Gaz",
+   "french": "Gaz",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 2450
+  },
+  {
+   "id": 11,
+   "code": "157",
+   "name": "Palm-oil",
+   "local": "Amavuta - Amamesa",
+   "french": "Oil de palm",
+   "unit": "litre",
+   "archived": false,
+   "referenceFarmgate": 2650
+  },
+  {
+   "id": 12,
+   "code": "156",
+   "name": "Oil - ubuto",
+   "local": "Amavuta ubuto",
+   "french": "Huile",
+   "unit": "bottle",
+   "archived": false,
+   "referenceFarmgate": 2800
+  },
+  {
+   "id": 13,
+   "code": "155",
+   "name": "Sugar",
+   "local": "Isukari",
+   "french": "Sucre",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1317
+  },
+  {
+   "id": 14,
+   "code": "153",
+   "name": "Irish- Potato- Kirundo",
+   "local": "Ibirayi - Kirundo",
+   "french": "Pomme de terre - Kirundo",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 715
+  },
+  {
+   "id": 15,
+   "code": "152",
+   "name": "Taro",
+   "local": "Amateke",
+   "french": "Amateke (Taro)",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 383
+  },
+  {
+   "id": 16,
+   "code": "151",
+   "name": "Rice - Rw - Nyiraburyohe",
+   "local": "Umuceri - Rw - Nyiraburyohe",
+   "french": "Riz - Rw - Nyiraburyohe",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 17,
+   "code": "150",
+   "name": "Rice - Rw - Luck rice",
+   "local": "Umuceri - Rw - Luck rice",
+   "french": "Riz - Rw - Luck rice",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1200
+  },
+  {
+   "id": 18,
+   "code": "149",
+   "name": "Bean - Injyamane",
+   "local": "Ibishyimbo - Injyamane",
+   "french": "Haricot - Injyamane",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1200
+  },
+  {
+   "id": 19,
+   "code": "148",
+   "name": "Irish- Potato- Kuruza",
+   "local": "Ibirayi - Kuruza",
+   "french": "Pomme de terre - Kuruza",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 700
+  },
+  {
+   "id": 20,
+   "code": "147",
+   "name": "Rice - TZ - No 2",
+   "local": "Umuceri - Tz No 2",
+   "french": "Riz - TZ - No 2",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1400
+  },
+  {
+   "id": 21,
+   "code": "146",
+   "name": "Coke - Isake",
+   "local": "Inkoko - Isake",
+   "french": "Poule - Isake",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 22,
+   "code": "145",
+   "name": "Egg- Pondese",
+   "local": "Igi- Pondeze",
+   "french": "Oeuf- Pondese",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": 160
+  },
+  {
+   "id": 23,
+   "code": "144",
+   "name": "Egg - irinyaRWANDA",
+   "local": "Igi - irinyaRwanda",
+   "french": "Oeuf - irinyaRwanda",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": 205
+  },
+  {
+   "id": 24,
+   "code": "143",
+   "name": "Meat - Rabbit",
+   "local": "Inyama - Urukwavu",
+   "french": "Viande Lapin",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 25,
+   "code": "142",
+   "name": "Rice - Rw - Gikonko",
+   "local": "Umuceri - Rw - Gikonko",
+   "french": "Riz - Rw - Gikonko",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1120
+  },
+  {
+   "id": 26,
+   "code": "141",
+   "name": "Rice -Rw - Kigori",
+   "local": "Umuceri - RW - Kigori",
+   "french": "Riz - Rw Kigor",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1080
+  },
+  {
+   "id": 27,
+   "code": "140",
+   "name": "Maize flour - Gashumba",
+   "local": "Ifu - Ibigori - Gashumba",
+   "french": "Gashumba",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 28,
+   "code": "139",
+   "name": "IRABONEYE",
+   "local": "Ifu - Ibigori - Iraboneye",
+   "french": "IRABONEYE",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 900
+  },
+  {
+   "id": 29,
+   "code": "138",
+   "name": "MINIMEX",
+   "local": "Ifu - Ibigori - MINIMEX",
+   "french": "MINIMEX",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 775
+  },
+  {
+   "id": 30,
+   "code": "137",
+   "name": "Maize Flour",
+   "local": "Ifu - Ibigori - Mugurusu",
+   "french": "Maise",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1000
+  },
+  {
+   "id": 31,
+   "code": "136",
+   "name": "Rabbit",
+   "local": "Urukwavu",
+   "french": "Lapin",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 32,
+   "code": "135",
+   "name": "Meet - inkoko - pondezi",
+   "local": "Inyama - inkoko - pondezi",
+   "french": "Inyama - inkoko - pondezi",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 5250
+  },
+  {
+   "id": 33,
+   "code": "134",
+   "name": "Meet - inkoko - rwanda",
+   "local": "Inyama - Inkoko - rwanda",
+   "french": "Inyama - inkoko - rwanda",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 6000
+  },
+  {
+   "id": 34,
+   "code": "133",
+   "name": "Meet - inkoko",
+   "local": "Inyama - inkoko",
+   "french": "Inyama - inkoko",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 35,
+   "code": "132",
+   "name": "Beef/ imvange",
+   "local": "Inyama-inka-imvange",
+   "french": "Beuf/ imvange",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 6250
+  },
+  {
+   "id": 36,
+   "code": "131",
+   "name": "Beef/Iroti",
+   "local": "Inyama-inka- Iroti",
+   "french": "Viande de beuf / iroti",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 7500
+  },
+  {
+   "id": 37,
+   "code": "130",
+   "name": "Fish - Indagara- umunyu",
+   "local": "Ifi- Indagara-umunyu",
+   "french": "Poisson- Indagara - umunyu",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 5000
+  },
+  {
+   "id": 38,
+   "code": "129",
+   "name": "Fish - isambaza",
+   "local": "Ifi - isambaza",
+   "french": "Poisson- Isambaza",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 39,
+   "code": "128",
+   "name": "Irish Potato - Gashora",
+   "local": "Ibirayi - Gashora",
+   "french": "Pomme de terre - Gashora",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 700
+  },
+  {
+   "id": 40,
+   "code": "127",
+   "name": "Irish-Potato - Nyirakabondo",
+   "local": "Ibirayi - Nyirakabondo",
+   "french": "Pomme de terre - Nyirakabondo",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 41,
+   "code": "126",
+   "name": "Irish- Potato - Peko",
+   "local": "Ibirayi - Peko",
+   "french": "Pomme de terre - Peko",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 700
+  },
+  {
+   "id": 42,
+   "code": "125",
+   "name": "Irish potato - Kuruseke",
+   "local": "Ibirayi - Kuruseke",
+   "french": "Pomme de terre - Kuruseke",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 700
+  },
+  {
+   "id": 43,
+   "code": "124",
+   "name": "Irish-Potato - Kinigi Grade 1",
+   "local": "Ibirayi- Kinigi Grade 1",
+   "french": "Pomme de terre - Kinigi Grade 1",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 950
+  },
+  {
+   "id": 44,
+   "code": "123",
+   "name": "Bean - Mushingiriro",
+   "local": "Ibishyimbo - Mushingiriro",
+   "french": "Haricot - Mushingiriro",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1250
+  },
+  {
+   "id": 45,
+   "code": "122",
+   "name": "Bean - Mugeri",
+   "local": "Ibishyimbo - Mugeri",
+   "french": "Haricot- Mugeri",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1200
+  },
+  {
+   "id": 46,
+   "code": "121",
+   "name": "Bean Kiryumukwe",
+   "local": "Ibishyimbo Kiryumukwe",
+   "french": "Haricot Kiryumukwe",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1250
+  },
+  {
+   "id": 47,
+   "code": "120",
+   "name": "Bean Colta",
+   "local": "Ibishyimbo Colta",
+   "french": "Haricot Colta",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1400
+  },
+  {
+   "id": 48,
+   "code": "119",
+   "name": "Bean Ibinyarwanda",
+   "local": "Ibishyimbo Ibinyarwanda",
+   "french": "Haricot Ibinyarwanda",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1100
+  },
+  {
+   "id": 49,
+   "code": "118",
+   "name": "Bean Shyushya",
+   "local": "Ibishyimbo Shyushya",
+   "french": "Haricot shyushya",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1200
+  },
+  {
+   "id": 50,
+   "code": "117",
+   "name": "Beans/Mutiki",
+   "local": "Ibishyimbo/Mutiki",
+   "french": "Haricots/Mutiki",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1300
+  },
+  {
+   "id": 51,
+   "code": "116",
+   "name": "Beef",
+   "local": "Inyama-zinka",
+   "french": "Viande de boeuf",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 5500
+  },
+  {
+   "id": 52,
+   "code": "62",
+   "name": "Beer-banana",
+   "local": "Ibitoki-inkashi",
+   "french": "Banane-biere",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 53,
+   "code": "61",
+   "name": "Maize-flour-imported",
+   "local": "Ifu-ibigori-yo-mumahanga",
+   "french": "Farine-mais-importée",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 54,
+   "code": "60",
+   "name": "Sorghum flour",
+   "local": "Ifu-amasaka",
+   "french": "Farine de sorgho",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 800
+  },
+  {
+   "id": 55,
+   "code": "63",
+   "name": "Charcoal",
+   "local": "Amakara",
+   "french": "Charbon de bois",
+   "unit": "sack",
+   "archived": false,
+   "referenceFarmgate": 14500
+  },
+  {
+   "id": 56,
+   "code": "115",
+   "name": "Eggplant",
+   "local": "Ibiringanya",
+   "french": "Aubergine",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 900
+  },
+  {
+   "id": 57,
+   "code": "114",
+   "name": "Cassava leaves",
+   "local": "Isombe",
+   "french": "Manioc feuilles",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 800
+  },
+  {
+   "id": 58,
+   "code": "113",
+   "name": "Hen",
+   "local": "Inkoko",
+   "french": "Poule",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 59,
+   "code": "112",
+   "name": "Sheep",
+   "local": "Intama",
+   "french": "Mouton",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 60,
+   "code": "111",
+   "name": "Goat",
+   "local": "Ihene",
+   "french": "Chevre",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 61,
+   "code": "110",
+   "name": "Pig",
+   "local": "Ingurube",
+   "french": "Porc",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 62,
+   "code": "109",
+   "name": "Cow_Beef",
+   "local": "Ikimasa",
+   "french": "Boeuf",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 63,
+   "code": "108",
+   "name": "Cow",
+   "local": "Inka",
+   "french": "Vache",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 64,
+   "code": "107",
+   "name": "Sheep skin",
+   "local": "Uruhu-intama",
+   "french": "Peau de mouton",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 65,
+   "code": "106",
+   "name": "Goat skin",
+   "local": "Uruhu-ihene",
+   "french": "Peau de chèvre",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 66,
+   "code": "105",
+   "name": "Cow skin",
+   "local": "Uruhu-inka",
+   "french": "Peau de vache",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 67,
+   "code": "103",
+   "name": "Sheep meat",
+   "local": "Inyama-intama",
+   "french": "Viande de mouton",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 68,
+   "code": "102",
+   "name": "Goat meat",
+   "local": "Inyama-ihene",
+   "french": "Viande de chèvre",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 7500
+  },
+  {
+   "id": 69,
+   "code": "101",
+   "name": "Porc meat",
+   "local": "Inyama-ingurube",
+   "french": "Viande de porc",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 70,
+   "code": "100",
+   "name": "Honey",
+   "local": "Ubuki",
+   "french": "Miel",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 6000
+  },
+  {
+   "id": 71,
+   "code": "99",
+   "name": "Egg",
+   "local": "Igi",
+   "french": "Oeuf",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 72,
+   "code": "96",
+   "name": "Betterave",
+   "local": "Beterave",
+   "french": "Beetroot",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 800
+  },
+  {
+   "id": 73,
+   "code": "95",
+   "name": "Cucumber",
+   "local": "Konkombure",
+   "french": "Concombre",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 800
+  },
+  {
+   "id": 74,
+   "code": "93",
+   "name": "Green bean",
+   "local": "Imiteja",
+   "french": "Haricot vert",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 850
+  },
+  {
+   "id": 75,
+   "code": "92",
+   "name": "Courgette",
+   "local": "Ibihaza",
+   "french": "Courgette",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 650
+  },
+  {
+   "id": 76,
+   "code": "91",
+   "name": "Lettuce",
+   "local": "Leti",
+   "french": "Laitue",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 77,
+   "code": "90",
+   "name": "Cauliflower",
+   "local": "Shufureri",
+   "french": "Choux- fleur",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 78,
+   "code": "89",
+   "name": "Guava",
+   "local": "Amapera",
+   "french": "Goyave",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 79,
+   "code": "88",
+   "name": "Gooseberry",
+   "local": "Imihuhu",
+   "french": "Groseille du cap",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 80,
+   "code": "87",
+   "name": "Spinach",
+   "local": "Epinari",
+   "french": "Epinard",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 600
+  },
+  {
+   "id": 81,
+   "code": "86",
+   "name": "Fresh bean",
+   "local": "Ibitonore",
+   "french": "Haricot frais",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 2100
+  },
+  {
+   "id": 82,
+   "code": "85",
+   "name": "Fresh peas",
+   "local": "Urunyogwe",
+   "french": "Petit pois frais",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 2950
+  },
+  {
+   "id": 83,
+   "code": "84",
+   "name": "Amaranth",
+   "local": "Dodo",
+   "french": "Amarante",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 350
+  },
+  {
+   "id": 84,
+   "code": "83",
+   "name": "Parsley",
+   "local": "Perisili",
+   "french": "Persil",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 85,
+   "code": "82",
+   "name": "Celery",
+   "local": "Sereli",
+   "french": "Celeri",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 700
+  },
+  {
+   "id": 86,
+   "code": "81",
+   "name": "White onion",
+   "local": "Ibitunguru-umweru",
+   "french": "Oignon blanc",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1100
+  },
+  {
+   "id": 87,
+   "code": "80",
+   "name": "Strawberry",
+   "local": "Inkeri",
+   "french": "Fraise",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 88,
+   "code": "79",
+   "name": "Avocado",
+   "local": "Avoka",
+   "french": "Avocat",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 475
+  },
+  {
+   "id": 89,
+   "code": "77",
+   "name": "Papaya",
+   "local": "Ipapayi",
+   "french": "Papaye",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 500
+  },
+  {
+   "id": 90,
+   "code": "76",
+   "name": "Plum",
+   "local": "Ibinyomoro",
+   "french": "Prune du Japon",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1300
+  },
+  {
+   "id": 91,
+   "code": "75",
+   "name": "Garlic",
+   "local": "Tungurusumu",
+   "french": "Ail",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 3500
+  },
+  {
+   "id": 92,
+   "code": "74",
+   "name": "Sweet pepper",
+   "local": "Puwavuro",
+   "french": "Poivron",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1300
+  },
+  {
+   "id": 93,
+   "code": "73",
+   "name": "Leek",
+   "local": "Puwaro",
+   "french": "Poireaux",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 94,
+   "code": "72",
+   "name": "Chilli",
+   "local": "Urusenda",
+   "french": "Piment",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 3250
+  },
+  {
+   "id": 95,
+   "code": "71",
+   "name": "Pineapple",
+   "local": "Inanasi",
+   "french": "Ananas",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 600
+  },
+  {
+   "id": 96,
+   "code": "70",
+   "name": "Mango",
+   "local": "Imyembe",
+   "french": "Mangue",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 2300
+  },
+  {
+   "id": 97,
+   "code": "69",
+   "name": "Lemon",
+   "local": "Indimu",
+   "french": "Citron",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1100
+  },
+  {
+   "id": 98,
+   "code": "68",
+   "name": "Orange",
+   "local": "Amacunga",
+   "french": "Orange",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 800
+  },
+  {
+   "id": 99,
+   "code": "67",
+   "name": "Mandarin",
+   "local": "Mandarine",
+   "french": "Mandarine",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1300
+  },
+  {
+   "id": 100,
+   "code": "66",
+   "name": "Apple",
+   "local": "Pome",
+   "french": "Pomme",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 4000
+  },
+  {
+   "id": 101,
+   "code": "65",
+   "name": "Carrot",
+   "local": "Karoti",
+   "french": "Carotte",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 875
+  },
+  {
+   "id": 102,
+   "code": "13",
+   "name": "DAP",
+   "local": "DAP",
+   "french": "DAP",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 960
+  },
+  {
+   "id": 103,
+   "code": "14",
+   "name": "Ditane",
+   "local": "Ditane",
+   "french": "Ditane",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 6500
+  },
+  {
+   "id": 104,
+   "code": "26",
+   "name": "Wheat-flour",
+   "local": "Ifu-ingano",
+   "french": "Ble-farine",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1100
+  },
+  {
+   "id": 105,
+   "code": "23",
+   "name": "Maize-flour",
+   "local": "Ifu-ibigori",
+   "french": "Mais-farine",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 106,
+   "code": "21",
+   "name": "Onion-Red",
+   "local": "Ibitunguru-bitukura",
+   "french": "Oignon-rouges",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 750
+  },
+  {
+   "id": 107,
+   "code": "59",
+   "name": "Uree",
+   "local": "Uree",
+   "french": "Uree",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 960
+  },
+  {
+   "id": 108,
+   "code": "58",
+   "name": "Rice-Tz",
+   "local": "Umuceli-Tz",
+   "french": "Riz-Tz",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1775
+  },
+  {
+   "id": 109,
+   "code": "57",
+   "name": "Rice-Rw",
+   "local": "Umuceli-RW",
+   "french": "Riz-Rw",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1065
+  },
+  {
+   "id": 110,
+   "code": "56",
+   "name": "Rice-Asia",
+   "local": "Umuceli-Asia",
+   "french": "Riz-Asia",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 111,
+   "code": "55",
+   "name": "Groundnut",
+   "local": "Ubunyobwa",
+   "french": "Arachide",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 2100
+  },
+  {
+   "id": 112,
+   "code": "53",
+   "name": "Soya-Bean",
+   "local": "Soya",
+   "french": "Soja",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1000
+  },
+  {
+   "id": 113,
+   "code": "48",
+   "name": "NPK",
+   "local": "NPK",
+   "french": "NPK",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 114,
+   "code": "44",
+   "name": "Tomatos",
+   "local": "Inyanya",
+   "french": "Tomate",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 500
+  },
+  {
+   "id": 115,
+   "code": "40",
+   "name": "Milk-fresh",
+   "local": "Inshyushyu",
+   "french": "Lait frais",
+   "unit": "litre",
+   "archived": false,
+   "referenceFarmgate": 525
+  },
+  {
+   "id": 116,
+   "code": "38",
+   "name": "Wheat",
+   "local": "Ingano",
+   "french": "Ble",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 900
+  },
+  {
+   "id": 117,
+   "code": "33",
+   "name": "Cassava",
+   "local": "Imyumbati",
+   "french": "Manioc",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 425
+  },
+  {
+   "id": 118,
+   "code": "30",
+   "name": "Banan-fruit",
+   "local": "Imineke",
+   "french": "Banane-fruit",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 625
+  },
+  {
+   "id": 119,
+   "code": "27",
+   "name": "Banana",
+   "local": "Igitoki",
+   "french": "Banane",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 400
+  },
+  {
+   "id": 120,
+   "code": "25",
+   "name": "Cassava-flour",
+   "local": "Ifu-imyumbati",
+   "french": "Manioc-farine",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 500
+  },
+  {
+   "id": 121,
+   "code": "20",
+   "name": "Bean",
+   "local": "Ibishyimbo",
+   "french": "Haricot",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 122,
+   "code": "19",
+   "name": "Irish-potato",
+   "local": "Ibirayi",
+   "french": "Pomme de terre",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 800
+  },
+  {
+   "id": 123,
+   "code": "17",
+   "name": "Sweet-potatoes",
+   "local": "Ibijumba",
+   "french": "Patatedouce",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 425
+  },
+  {
+   "id": 124,
+   "code": "16",
+   "name": "Maize",
+   "local": "Ibigori",
+   "french": "Mais",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 435
+  },
+  {
+   "id": 125,
+   "code": "10",
+   "name": "Passion-fruit",
+   "local": "Amatunda",
+   "french": "Maracouja",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 1800
+  },
+  {
+   "id": 126,
+   "code": "9",
+   "name": "Cabbage",
+   "local": "Amashu",
+   "french": "Choux",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 425
+  },
+  {
+   "id": 127,
+   "code": "8",
+   "name": "Peas",
+   "local": "Amashaza",
+   "french": "Petits-pois",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 2700
+  },
+  {
+   "id": 128,
+   "code": "7",
+   "name": "Sorghum",
+   "local": "Amasaka",
+   "french": "Sorgho rouge",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 640
+  },
+  {
+   "id": 129,
+   "code": "167",
+   "name": "Irish potato - Kinigi Grade 2",
+   "local": "Ibirayi- Kinigi Grade 2",
+   "french": "",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": 865
+  },
+  {
+   "id": 131,
+   "code": "101",
+   "name": "Yams",
+   "local": "Amateke",
+   "french": "Igname",
+   "unit": "piece",
+   "archived": true,
+   "referenceFarmgate": 475
+  },
+  {
+   "id": 132,
+   "code": "10000",
+   "name": "RICE - luck Kema",
+   "local": "Umuceri - luck Kema",
+   "french": "RIZ - luck Kema",
+   "unit": "kg",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 133,
+   "code": "500",
+   "name": "Cow - Gakondo (Local Cow)",
+   "local": "Inka - Gakondo",
+   "french": "Vache - Gakondo (Local Cow)",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": null
+  },
+  {
+   "id": 134,
+   "code": "134",
+   "name": "Exotic Chicken - Inzungu - z' Inyama (below 2 weeks)",
+   "local": "Inkoko - Inzungu - z' Inyama (below 2 weeks)",
+   "french": "Poule - Inzungu - z' Inyama (below 2 weeks)",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": 4500
+  },
+  {
+   "id": 135,
+   "code": "502",
+   "name": "Gaot - Ikuze - Inzungu",
+   "local": "Ihene - Ikuze - Inzungu",
+   "french": "Chevre - Ikuze - Inzungu",
+   "unit": "piece",
+   "archived": false,
+   "referenceFarmgate": 75000
+  }
+ ],
+ "markets": [
+  {
+   "id": 3,
+   "code": "302",
+   "name": "Byumba",
+   "source": "byumba",
+   "district": "Gicumbi",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 4,
+   "code": "205",
+   "name": "Ndago",
+   "source": "ndago",
+   "district": "Nyanza",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 5,
+   "code": "301",
+   "name": "Base",
+   "source": "base",
+   "district": "Rulindo",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 6,
+   "code": "411",
+   "name": "Rwamagana",
+   "source": "rwamagana",
+   "district": "Rwamagana",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 7,
+   "code": "401",
+   "name": "Nyagatare",
+   "source": "nyagatare",
+   "district": "Nyagatare",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 8,
+   "code": "509",
+   "name": "Bushenge",
+   "source": "bushenge",
+   "district": "Nyamasheke",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 9,
+   "code": "506",
+   "name": "Kibirizi",
+   "source": "kibirizi",
+   "district": "Karongi",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 10,
+   "code": "106",
+   "name": "Gahanga",
+   "source": "gahanga",
+   "district": "Kicukiro",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 11,
+   "code": "311",
+   "name": "Shyorongi",
+   "source": "shyorongi",
+   "district": "Rulindo",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 12,
+   "code": "512",
+   "name": "Kirambo1",
+   "source": "kirambo1",
+   "district": "Nyamasheke",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 13,
+   "code": "312",
+   "name": "Nyagahinga",
+   "source": "nyagahinga",
+   "district": "Burera",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 14,
+   "code": "507",
+   "name": "Kamembe",
+   "source": "kamembe",
+   "district": "Rusizi",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 15,
+   "code": "108",
+   "name": "Gahoromani",
+   "source": "gahoromani",
+   "district": "Kicukiro",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 16,
+   "code": "406",
+   "name": "Kibungo",
+   "source": "kibungo",
+   "district": "Ngoma",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 17,
+   "code": "412",
+   "name": "Matimba",
+   "source": "matimba",
+   "district": "Nyagatare",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 18,
+   "code": "513",
+   "name": "Kibuye",
+   "source": "kibuye",
+   "district": "Karongi",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 19,
+   "code": "105",
+   "name": "Mulindi",
+   "source": "mulindi",
+   "district": "Gasabo",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 20,
+   "code": "102",
+   "name": "Nyabugogo",
+   "source": "nyabugogo",
+   "district": "Nyarugenge",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 21,
+   "code": "307",
+   "name": "Kirambo",
+   "source": "kirambo",
+   "district": "Burera",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 22,
+   "code": "504",
+   "name": "Gisenyi",
+   "source": "gisenyi",
+   "district": "Rubavu",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 23,
+   "code": "414",
+   "name": "Gatore",
+   "source": "gatore",
+   "district": "Kirehe",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 24,
+   "code": "202",
+   "name": "Muhanga",
+   "source": "muhanga",
+   "district": "Muhanga",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 25,
+   "code": "104",
+   "name": "Nyamirambo",
+   "source": "nyamirambo",
+   "district": "Nyarugenge",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 26,
+   "code": "213",
+   "name": "Buhanda",
+   "source": "buhanda",
+   "district": "Ruhango",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 27,
+   "code": "305",
+   "name": "Rugarama",
+   "source": "rugarama",
+   "district": "Gakenke",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 28,
+   "code": "402",
+   "name": "Rwagitima",
+   "source": "rwagitima",
+   "district": "Gatsibo",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 29,
+   "code": "215",
+   "name": "Mugina",
+   "source": "mugina",
+   "district": "Kamonyi",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 30,
+   "code": "208",
+   "name": "Karambi",
+   "source": "karambi",
+   "district": "Huye",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 31,
+   "code": "501",
+   "name": "Mukamira",
+   "source": "mukamira",
+   "district": "Nyabihu",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 32,
+   "code": "107",
+   "name": "Kimisagara",
+   "source": "kimisagara",
+   "district": "Nyarugenge",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 33,
+   "code": "203",
+   "name": "Butare",
+   "source": "butare",
+   "district": "Huye",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 34,
+   "code": "503",
+   "name": "Congonil",
+   "source": "congonil",
+   "district": "Rutsiro",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 35,
+   "code": "407",
+   "name": "Ruhuha",
+   "source": "ruhuha",
+   "district": "Bugesera",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 36,
+   "code": "413",
+   "name": "Intunga",
+   "source": "intunga",
+   "district": "Rwamagana",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 37,
+   "code": "511",
+   "name": "Nkora",
+   "source": "nkora",
+   "district": "Rutsiro",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 38,
+   "code": "214",
+   "name": "Ruhango",
+   "source": "ruhango",
+   "district": "Ruhango",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 39,
+   "code": "206",
+   "name": "Musha",
+   "source": "musha",
+   "district": "Gisagara",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 40,
+   "code": "103",
+   "name": "Kimironko (Gasabo, code 103)",
+   "source": "kimironko",
+   "district": "Gasabo",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 41,
+   "code": "201",
+   "name": "Kayenzi",
+   "source": "kayenzi",
+   "district": "Kamonyi",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 42,
+   "code": "403",
+   "name": "Rukomo",
+   "source": "rukomo",
+   "district": "Nyagatare",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 43,
+   "code": "310",
+   "name": "Mubyangabo",
+   "source": "mubyangabo",
+   "district": "Musanze",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 44,
+   "code": "306",
+   "name": "Musanze",
+   "source": "musanze",
+   "district": "Musanze",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 45,
+   "code": "216",
+   "name": "Kizi",
+   "source": "kizi",
+   "district": "Huye",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 46,
+   "code": "303",
+   "name": "Gaseke",
+   "source": "gaseke",
+   "district": "Gicumbi",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 47,
+   "code": "409",
+   "name": "Nyamata",
+   "source": "nyamata",
+   "district": "Bugesera",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 48,
+   "code": "502",
+   "name": "Kabaya",
+   "source": "kabaya",
+   "district": "Ngororero",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 49,
+   "code": "410",
+   "name": "Kabarondo",
+   "source": "kabarondo",
+   "district": "Kayonza",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 50,
+   "code": "101",
+   "name": "Kicukiro-center",
+   "source": "kicukiro-center",
+   "district": "Kicukiro",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 51,
+   "code": "408",
+   "name": "Karenge",
+   "source": "karenge",
+   "district": "Rwamagana",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 52,
+   "code": "304",
+   "name": "Rushashi",
+   "source": "rushashi",
+   "district": "Gakenke",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 53,
+   "code": "211",
+   "name": "Gasarenda",
+   "source": "gasarenda",
+   "district": "Nyamagabe",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 54,
+   "code": "505",
+   "name": "Mahoko",
+   "source": "mahoko",
+   "district": "Rubavu",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 55,
+   "code": "510",
+   "name": "Birambo",
+   "source": "birambo",
+   "district": "Karongi",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 56,
+   "code": "404",
+   "name": "Mukarange",
+   "source": "mukarange",
+   "district": "Kayonza",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 57,
+   "code": "405",
+   "name": "Nyakarambi",
+   "source": "nyakarambi",
+   "district": "Kirehe",
+   "province": "Eastern Province",
+   "registryProvince": "Eastern Province"
+  },
+  {
+   "id": 58,
+   "code": "210",
+   "name": "Gashyushya",
+   "source": "gashyushya",
+   "district": "Kamonyi",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 59,
+   "code": "508",
+   "name": "Bugarama",
+   "source": "bugarama",
+   "district": "Rusizi",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  },
+  {
+   "id": 60,
+   "code": "308",
+   "name": "Gakenke",
+   "source": "gakenke",
+   "district": "Gakenke",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 61,
+   "code": "209",
+   "name": "Gacurabwenge",
+   "source": "gacurabwenge",
+   "district": "Kamonyi",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 62,
+   "code": "204",
+   "name": "Nyanza",
+   "source": "nyanza",
+   "district": "Huye",
+   "province": "Southern Province",
+   "registryProvince": "Southern Province"
+  },
+  {
+   "id": 63,
+   "code": "309",
+   "name": "Muhondo",
+   "source": "muhondo",
+   "district": "Gakenke",
+   "province": "Northern Province",
+   "registryProvince": "Northern Province"
+  },
+  {
+   "id": 64,
+   "code": "002",
+   "name": "Kimironko (Gasabo, code 002)",
+   "source": "Kimironko",
+   "district": "Gasabo",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 67,
+   "code": "010",
+   "name": "Ziniya",
+   "source": "ziniya",
+   "district": "Kicukiro",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 68,
+   "code": "003",
+   "name": "Kimironko (Kicukiro)",
+   "source": "Kimironko",
+   "district": "Kicukiro",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 70,
+   "code": "123",
+   "name": "Kimironko Market",
+   "source": "kimironko Market",
+   "district": "Kicukiro",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 71,
+   "code": "1113",
+   "name": "Kicukiro Market",
+   "source": "Kicukiro Market",
+   "district": "Kicukiro",
+   "province": "Kigali City",
+   "registryProvince": "Kigali City"
+  },
+  {
+   "id": 91,
+   "code": "007",
+   "name": "Ngororero",
+   "source": "Ngororero",
+   "district": "Ngororero",
+   "province": "Western Province",
+   "registryProvince": "Western Province"
+  }
+ ],
+ "notes": [
+  "7 market records have a province that disagrees with their district.",
+  "Mugina: district Kamonyi is in Southern Province, but the market record also says Western Province. District was used.",
+  "Congonil: district Rutsiro is in Western Province, but the market record also says Northern Province. District was used.",
+  "Kayenzi: district Kamonyi is in Southern Province, but the market record also says Eastern Province. District was used.",
+  "Kabaya: district Ngororero is in Western Province, but the market record also says Eastern Province. District was used.",
+  "Gasarenda: district Nyamagabe is in Southern Province, but the market record also says Eastern Province. District was used.",
+  "Gakenke: district Gakenke is in Northern Province, but the market record also says Western Province. District was used.",
+  "Muhondo: district Gakenke is in Northern Province, but the market record also says Southern Province. District was used.",
+  "3 registered markets are named \"Kimironko\". They are kept apart by district."
+ ]
+}
