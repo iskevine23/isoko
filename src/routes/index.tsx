@@ -12,6 +12,8 @@ import { useMemo, useState, type ReactNode } from "react";
 import {
   Area,
   AreaChart,
+  Bar,
+  BarChart,
   CartesianGrid,
   Cell,
   Pie,
@@ -85,6 +87,13 @@ function splitRecords(result: AnalysisResult) {
 
 const fmt = (n: number) => n.toLocaleString();
 
+function dayLabel(isoDate: string) {
+  const parsed = new Date(`${isoDate}T00:00:00`);
+  return Number.isNaN(parsed.getTime())
+    ? isoDate
+    : parsed.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+
 function Dashboard() {
   const { result, score } = useAnalysis();
   const counts = issueCounts(result.issues);
@@ -109,15 +118,21 @@ function Dashboard() {
 
   const trend = useMemo(() => {
     const byDate = new Map<string, Record<string, number[]>>();
+    const marketsByDate = new Map<string, Set<string>>();
     for (const row of clean) {
       if (row.commodity !== commodity || !row.date) continue;
       if (province && matchProvince(row.province) !== province) continue;
       const bucket = byDate.get(row.date) ?? {};
       (bucket[row.channel] ??= []).push(row.price!);
       byDate.set(row.date, bucket);
+      const seen = marketsByDate.get(row.date) ?? new Set<string>();
+      seen.add(row.market);
+      marketsByDate.set(row.date, seen);
     }
     return [...byDate.entries()].sort().map(([date, values]) => ({
       date: date.slice(5),
+      fullDate: date,
+      markets: marketsByDate.get(date)?.size ?? 0,
       farmgate: values.farmgate ? Math.round(median(values.farmgate)) : null,
       wholesale: values.wholesale ? Math.round(median(values.wholesale)) : null,
       retail: values.retail ? Math.round(median(values.retail)) : null,
@@ -474,9 +489,14 @@ function Dashboard() {
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
         <Panel
           className="lg:col-span-2"
-          title={
-            province ? `Median price over time · ${province.replace(" Province", "")}` : "Median price over time"
-          }
+          title={[
+            trend.length === 1
+              ? `Latest prices · ${dayLabel(trend[0].fullDate)}`
+              : "Median price over time",
+            province?.replace(" Province", ""),
+          ]
+            .filter(Boolean)
+            .join(" · ")}
           action={
             commodities.length > 0 ? (
               <SearchSelect
@@ -498,6 +518,8 @@ function Dashboard() {
                   : "No clean prices for this commodity yet."
               }
             />
+          ) : trend.length === 1 ? (
+            <SingleDayPrices day={trend[0]} />
           ) : (
             <>
               <div className="h-64">
@@ -834,6 +856,54 @@ function ChannelKey() {
         </span>
       ))}
     </div>
+  );
+}
+
+/** A trend needs two dates; with one, compare the three channels side by side instead. */
+function SingleDayPrices({
+  day,
+}: {
+  day: { markets: number } & Record<(typeof CHANNELS)[number], number | null>;
+}) {
+  const bars = CHANNELS.map((c) => ({ channel: c, name: CHANNEL_LABEL[c], price: day[c] }));
+  return (
+    <>
+      <div className="h-64">
+        <ResponsiveContainer>
+          <BarChart data={bars} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+            <CartesianGrid vertical={false} stroke={GRID} />
+            <XAxis dataKey="name" tick={AXIS} axisLine={false} tickLine={false} />
+            <YAxis
+              tick={AXIS}
+              axisLine={false}
+              tickLine={false}
+              width={52}
+              tickFormatter={(v) => fmt(Number(v))}
+            />
+            <Tooltip
+              cursor={{ fill: "rgb(16 42 27 / 0.04)" }}
+              contentStyle={TOOLTIP}
+              formatter={(value) => [
+                value == null ? "No data" : `${fmt(Number(value))} RWF`,
+                day.markets > 1 ? `Median of ${day.markets} markets` : "Price",
+              ]}
+            />
+            <Bar dataKey="price" radius={[6, 6, 0, 0]} maxBarSize={72}>
+              {bars.map((b) => (
+                <Cell key={b.channel} fill={COLOR[b.channel]} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      <p className="mt-3 text-xs text-muted-foreground">
+        {day.markets > 1
+          ? `Typical (median) price across the ${day.markets} markets that reported on this day.`
+          : "Price reported by the only market with data on this day."}{" "}
+        All prices are from one day, so there is no trend yet. Upload more days to see how prices
+        change over time.
+      </p>
+    </>
   );
 }
 
