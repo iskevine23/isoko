@@ -5,6 +5,25 @@ import type { DataRecord, Issue } from "./types";
 
 const MIN_GROUP = 5;
 
+/** "about 6.3 times" / "62% above" / "only about 10% of" / "35% below", to read before "the usual … price". */
+function comparedToUsual(price: number, median: number): string {
+  const ratio = price / median;
+  if (ratio >= 2) return `about ${ratio.toFixed(1)} times`;
+  if (ratio > 1) return `${Math.round((ratio - 1) * 100)}% above`;
+  if (ratio <= 0.5) return `only about ${Math.round(ratio * 100)}% of`;
+  return `${Math.round((1 - ratio) * 100)}% below`;
+}
+
+function likelyCause(price: number, median: number): string {
+  const ratio = price / median;
+  if (ratio >= 7) return "This looks like an extra zero or a price entered for a larger unit.";
+  if (ratio <= 1 / 7)
+    return "This looks like a missing zero or a price entered for a smaller unit.";
+  return ratio > 1
+    ? "It may be a typing error, a different unit, or a real local price rise."
+    : "It may be a typing error, a different unit, or a real local price drop.";
+}
+
 /**
  * Layer 2 + 3: statistical and contextual anomaly detection.
  * Prices are compared within (commodity, price channel) peer groups across markets,
@@ -35,7 +54,6 @@ export function detectPriceAnomalies(records: DataRecord[]): Issue[] {
       const outsideFence = price < stats.lowerFence || price > stats.upperFence;
       if (Math.abs(z) < 3.5 && !outsideFence) continue;
 
-      const deviation = ((price - stats.median) / stats.median) * 100;
       const confidence = Math.min(
         0.99,
         0.6 + Math.min(Math.abs(z), 12) / 20 + (outsideFence ? 0.08 : 0),
@@ -49,12 +67,13 @@ export function detectPriceAnomalies(records: DataRecord[]): Issue[] {
         category: "anomaly",
         severity: Math.abs(z) > 8 ? "critical" : Math.abs(z) > 5 ? "high" : "medium",
         confidence,
-        title: `Unusual ${CHANNEL_LABEL[channel] ?? channel} price for ${commodity}`,
-        explanation: `${commodity} at ${r.market} is priced ${Math.abs(Math.round(deviation))}% ${
-          high ? "above" : "below"
-        } the national ${CHANNEL_LABEL[channel]?.toLowerCase() ?? channel} median for this commodity. It falls outside the range observed in ${
-          stats.n
-        } comparable market observations.`,
+        title: `${commodity}: ${(CHANNEL_LABEL[channel] ?? channel).toLowerCase()} price is unusually ${high ? "high" : "low"}`,
+        explanation: `At ${r.market || "this market"}, ${commodity} is priced ${price.toLocaleString()} RWF/${r.unit || "kg"}, ${comparedToUsual(
+          price,
+          stats.median,
+        )} the usual ${(CHANNEL_LABEL[channel] ?? channel).toLowerCase()} price in other markets (${Math.round(
+          stats.median,
+        ).toLocaleString()} RWF, from ${stats.n} prices). ${likelyCause(price, stats.median)}`,
         evidence: [
           { label: "Observed", value: `${price.toLocaleString()} RWF/${r.unit || "kg"}` },
           {
@@ -69,9 +88,9 @@ export function detectPriceAnomalies(records: DataRecord[]): Issue[] {
           },
           { label: "Robust z-score", value: z.toFixed(2) },
         ],
-        recommendation: high
-          ? "Verify with the market reporter — this may be a unit or data-entry error."
-          : "Verify with the market reporter — the price may have been entered in the wrong unit.",
+        recommendation: `Check the price with the market reporter and correct it if it is wrong. The usual price (${Math.round(
+          stats.median,
+        ).toLocaleString()} RWF) is suggested.`,
         method: "Modified z-score (median/MAD) + IQR fence within commodity × price channel",
         suggestion: { field: "price", value: Math.round(stats.median) },
         status: "open",
@@ -118,9 +137,9 @@ export function detectLadderViolations(records: DataRecord[]): Issue[] {
         severity: retailBelowFarm ? "critical" : gap > 30 ? "high" : "medium",
         confidence: Math.min(0.97, 0.75 + gap / 200),
         title: retailBelowFarm
-          ? "Retail price below farm-gate price"
-          : `Pricing ladder violation — ${lowLabel} above ${highLabel}`,
-        explanation: `For ${high.commodity} at ${high.market}, the ${lowLabel.toLowerCase()} price (${low.price.toLocaleString()} RWF) is higher than the ${highLabel.toLowerCase()} price (${high.price.toLocaleString()} RWF). The expected relationship is farm gate ≤ wholesale ≤ retail.`,
+          ? "Retail price is lower than farm-gate price"
+          : `${lowLabel} price is higher than ${highLabel.toLowerCase()} price`,
+        explanation: `For ${high.commodity} at ${high.market}, the ${lowLabel.toLowerCase()} price (${low.price.toLocaleString()} RWF) is higher than the ${highLabel.toLowerCase()} price (${high.price.toLocaleString()} RWF). Prices normally rise from farm gate to wholesale to retail, so one of these two prices is probably wrong.`,
         evidence: [
           { label: lowLabel, value: `${low.price.toLocaleString()} RWF (row #${low.rowNumber})` },
           {
@@ -130,8 +149,8 @@ export function detectLadderViolations(records: DataRecord[]): Issue[] {
           { label: "Inversion", value: `${gap.toFixed(1)}%` },
         ],
         recommendation: retailBelowFarm
-          ? "Correct the mis-recorded price or delete it. Retail can never be below farm gate."
-          : "Confirm which of the two prices was mis-recorded.",
+          ? "Check both prices with the market reporter and correct the wrong one. Retail can never be lower than the farm-gate price."
+          : "Check both prices with the market reporter and correct the one that was entered wrongly.",
         method: "Contextual rule — farm gate ≤ wholesale ≤ retail (Layer 3)",
         status: "open",
       });
@@ -152,8 +171,8 @@ export function detectLadderViolations(records: DataRecord[]): Issue[] {
           category: "anomaly",
           severity: "high",
           confidence: Math.min(0.96, 0.7 + (ratio - 3) / 10),
-          title: `Extreme farm-to-retail markup for ${retail.commodity}`,
-          explanation: `Retail price is ${ratio.toFixed(1)}× the farm-gate price at ${retail.market}. Typical markups in this dataset are well below 3×.`,
+          title: `${retail.commodity}: retail price is ${ratio.toFixed(1)}× the farm-gate price`,
+          explanation: `At ${retail.market}, ${retail.commodity} sells for ${retail.price.toLocaleString()} RWF at retail but ${farm.price.toLocaleString()} RWF at farm gate, ${ratio.toFixed(1)} times more. Markups above 3 times are rare and usually mean one of the prices was entered for a different unit or quantity.`,
           evidence: [
             { label: "Farm gate", value: `${farm.price.toLocaleString()} RWF` },
             { label: "Retail", value: `${retail.price.toLocaleString()} RWF` },

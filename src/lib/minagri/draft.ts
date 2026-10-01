@@ -240,14 +240,21 @@ export function issueFields(issue: Issue): EditableField[] {
     case "UNIT_INCONSISTENCY":
       return ["unit"];
     case "UNKNOWN_ENTITY":
-    case "ENTITY_MATCH": {
-      const f = issue.suggestion?.field;
-      if (f === "market" || f === "commodity") return [f];
-      return [/market/i.test(issue.title) ? "market" : "commodity"];
-    }
+    case "ENTITY_MATCH":
+      return [entityField(issue)];
     default:
       return [];
   }
+}
+
+/**
+ * Whether a name finding is about the market or the product. Titles put a fixed label before the quoted
+ * input ("Not a known market: \"…\""), so only that label is read; the input itself may contain "market".
+ */
+export function entityField(issue: Issue): "market" | "commodity" {
+  const f = issue.suggestion?.field;
+  if (f === "market" || f === "commodity") return f;
+  return /market/i.test(issue.title.split('"')[0] ?? "") ? "market" : "commodity";
 }
 
 export const isBlocking = (issue: Issue) =>

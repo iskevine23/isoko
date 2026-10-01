@@ -34,11 +34,11 @@ export function detectDuplicates(records: DataRecord[]): Issue[] {
         severity: samePrice ? "high" : "critical",
         confidence: samePrice ? 0.99 : 0.9,
         title: samePrice
-          ? "Exact duplicate observation"
-          : "Conflicting duplicate — same key, different price",
+          ? `Duplicate of row #${first.rowNumber}`
+          : `Two different prices for the same product, market and day (row #${first.rowNumber})`,
         explanation: samePrice
-          ? `Row #${dup.rowNumber} repeats row #${first.rowNumber}: identical date, market, commodity and price type.`
-          : `Row #${dup.rowNumber} has the same date, market, commodity and price type as row #${first.rowNumber}, but a different price (${first.price} vs ${dup.price} RWF). Only one can be correct.`,
+          ? `Row #${dup.rowNumber} repeats row #${first.rowNumber}: same date, market, product, price type and price. Counting it twice would distort averages.`
+          : `Row #${dup.rowNumber} has the same date, market, product and price type as row #${first.rowNumber}, but a different price (${first.price} vs ${dup.price} RWF). Only one can be correct.`,
         evidence: [
           {
             label: "Key",
@@ -49,8 +49,8 @@ export function detectDuplicates(records: DataRecord[]): Issue[] {
         ],
         recommendation: samePrice
           ? "Remove the repeated row."
-          : "Confirm which price is authoritative.",
-        method: "Deterministic key matching (date + market + commodity + price type)",
+          : "Check with the market reporter which price is correct and remove the other row.",
+        method: "Exact match on date, market, product and price type",
         status: "open",
       });
     });
@@ -96,7 +96,7 @@ export function detectDuplicates(records: DataRecord[]): Issue[] {
         severity: score >= 0.92 ? "medium" : "low",
         confidence: score,
         title: `${score >= 0.92 ? "Probable" : "Possible"} duplicate of row #${a.rowNumber}`,
-        explanation: `Rows #${a.rowNumber} and #${b.rowNumber} describe nearly the same observation: "${a.market} / ${a.commodity}" vs "${b.market} / ${b.commodity}" on the same date and price type.`,
+        explanation: `Rows #${a.rowNumber} and #${b.rowNumber} look like the same price written slightly differently: "${a.market} / ${a.commodity}" and "${b.market} / ${b.commodity}", on the same date and price type.`,
         evidence: [
           { label: "Market similarity", value: `${Math.round(ms * 100)}%` },
           { label: "Commodity similarity", value: `${Math.round(cs * 100)}%` },

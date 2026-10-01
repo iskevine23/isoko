@@ -125,6 +125,8 @@ def _forest_issues(df: pd.DataFrame, stat_issues: list[dict], model: PriceModel)
         row = ff.frame.iloc[idx]
         flagged_ids.append(row["id"])
         label, reading = FEATURES[f], ff.display[idx][f]
+        # The z-score reading is not plain language; the peer comparison says the same thing.
+        plain_reading = ff.display[idx][0] if f == 1 else reading
         confidence = min(0.97, 0.7 + (s - thr) * 2)
         existing = stat_by_record.get(row["id"])
         if existing is not None:
@@ -142,11 +144,10 @@ def _forest_issues(df: pd.DataFrame, stat_issues: list[dict], model: PriceModel)
         can_suggest = int(row["peer_count"]) >= MIN_PEERS
         new.append(issue(
             row["id"], "PRICE_ANOMALY", "anomaly", "high" if s >= thr + 0.06 else "medium", confidence,
-            f"Unusual {channel} price pattern for {row['commodity']}",
-            f"The {channel} price at {row['market'] or 'this market'} scored {s:.3f} on the Isolation Forest. Rows above "
-            f"{thr:.3f} are the {CONTAMINATION * 100:.1f}% hardest-to-explain rows in the training data. The model looks at "
-            f"commodity peers, the market's and province's usual levels, and the farm–wholesale–retail ladder together. "
-            f'The feature furthest from typical is "{label.lower()}": {reading}.',
+            f"{row['commodity'] or 'Product'}: {channel} price looks unusual",
+            f"The AI model compared this {channel} price at {row['market'] or 'this market'} with the same product in "
+            f"other markets, this market's and province's usual price levels, and the farm gate → wholesale → retail "
+            f"order. It is among the {CONTAMINATION * 100:.1f}% most unusual prices. What stands out most: {plain_reading}.",
             [
                 ("Observed", f"{rwf(row['price'])}/{row['unit'] or 'kg'}"),
                 ("Isolation Forest", f"{s:.3f} (review line {thr:.3f})"),
@@ -154,8 +155,9 @@ def _forest_issues(df: pd.DataFrame, stat_issues: list[dict], model: PriceModel)
                 ("Commodity peers", ff.display[idx][0]),
                 ("Model", f"scikit-learn IsolationForest, {trees} trees trained on {trained_on}"),
             ],
-            "Compare with the same commodity in other markets. Correct it if the unit or channel was entered wrongly."
-            if can_suggest else "Too few markets priced this commodity to suggest a value. Confirm with the market reporter.",
+            "Compare with the same product in other markets and check it with the market reporter. Correct it if the "
+            "unit or price type was entered wrongly."
+            if can_suggest else "Too few markets priced this product to suggest a value. Check the price with the market reporter.",
             "Isolation Forest on relative price features (Python AI API, Layer 4, saved model)",
             ("price", round(float(row["peer_median"]))) if can_suggest else None,
         ))

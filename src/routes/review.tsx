@@ -5,6 +5,7 @@ import { AppShell, SeverityBadge, Stat } from "@/components/AppShell";
 import { pageTitle } from "@/lib/brand";
 import { AiMark, EmptyState } from "@/components/minagri/visuals";
 import { Button } from "@/components/ui/button";
+import { entityField } from "@/lib/minagri/draft";
 import { issueCounts } from "@/lib/minagri/scoring";
 import { resolveIssue, useAnalysis } from "@/lib/minagri/store";
 import type { Issue } from "@/lib/minagri/types";
@@ -168,11 +169,9 @@ function IssueDetail({
   const field: "commodity" | "market" | "price" | undefined =
     issue.suggestion?.field === "commodity" || issue.suggestion?.field === "market" || issue.suggestion?.field === "price"
       ? issue.suggestion.field
-      : issue.type === "UNKNOWN_ENTITY" && /commodity/i.test(issue.title)
-        ? "commodity"
-        : issue.type === "UNKNOWN_ENTITY" && /market/i.test(issue.title)
-          ? "market"
-          : undefined;
+      : issue.type === "UNKNOWN_ENTITY"
+        ? entityField(issue)
+        : undefined;
   const original = field && field !== "price" ? record?.trace[field]?.original : record?.trace.commodity?.original;
   const alternatives =
     (field === "commodity" || field === "market") && issue.category === "match"

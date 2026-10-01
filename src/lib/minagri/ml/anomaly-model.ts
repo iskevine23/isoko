@@ -110,6 +110,8 @@ export function detectWithForest(
 
     const label = FEATURES[feature] ?? "Price pattern";
     const reading = point.display[feature] ?? "";
+    // The z-score reading is not plain language; the peer comparison says the same thing.
+    const plainReading = (feature === 1 ? point.display[0] : reading) ?? reading;
     const record = point.record;
     const channel = CHANNEL_LABEL[record.channel] ?? record.channel;
     const scoreText = hit.score.toFixed(3);
@@ -138,8 +140,8 @@ export function detectWithForest(
       category: "anomaly",
       severity: hit.score >= threshold + 0.06 ? "high" : "medium",
       confidence,
-      title: `Unusual ${channel.toLowerCase()} price pattern for ${record.commodity || "this commodity"}`,
-      explanation: `The ${channel.toLowerCase()} price at ${record.market || "this market"} scored ${scoreText} on the Isolation Forest. Rows above ${threshold.toFixed(3)} are the ${(model.contamination * 100).toFixed(1)}% hardest-to-explain rows in the training data. The model looks at commodity peers, the market's and province's usual levels, and the farm–wholesale–retail ladder together. The feature furthest from typical is "${label.toLowerCase()}": ${reading}.`,
+      title: `${record.commodity || "Product"}: ${channel.toLowerCase()} price looks unusual`,
+      explanation: `The AI model compared this ${channel.toLowerCase()} price at ${record.market || "this market"} with the same product in other markets, this market's and province's usual price levels, and the farm gate → wholesale → retail order. It is among the ${(model.contamination * 100).toFixed(1)}% most unusual prices. What stands out most: ${plainReading}.`,
       evidence: [
         { label: "Observed", value: `${record.price!.toLocaleString()} RWF/${record.unit || "kg"}` },
         { label: "Isolation Forest", value: `${scoreText} (review line ${threshold.toFixed(3)})` },
@@ -148,8 +150,8 @@ export function detectWithForest(
         { label: "Model", value: `${trees} trees trained on ${trainedOn}` },
       ],
       recommendation: canSuggest
-        ? "Compare with the same commodity in other markets. Correct it if the unit or channel was entered wrongly."
-        : "Too few markets priced this commodity to suggest a value. Confirm the price with the market reporter.",
+        ? "Compare with the same product in other markets and check it with the market reporter. Correct it if the unit or price type was entered wrongly."
+        : "Too few markets priced this product to suggest a value. Check the price with the market reporter.",
       method: `Isolation Forest on relative price features (Layer 4, ${origin === "trained" ? "saved model" : "fitted on this file"})`,
       suggestion: canSuggest ? { field: "price", value: Math.round(point.peerMedian) } : undefined,
       status: "open",

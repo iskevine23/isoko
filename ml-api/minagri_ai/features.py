@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 
 from .config import MIN_PEERS
-from .statistics import priced, robust_stats
+from .statistics import CHANNEL_LABEL, priced, robust_stats
 
 FEATURES = [
     "Versus same commodity and channel",
@@ -96,12 +96,13 @@ def build_features(df: pd.DataFrame) -> FeatureFrame:
     display = []
     for i in range(len(p)):
         n = int(p.at[i, "peer_count"])
-        peers = f"{n} {p.at[i, 'channel']} observations" if enough[i] else f"only {n} comparable market{'s' if n != 1 else ''}"
+        channel = CHANNEL_LABEL.get(p.at[i, "channel"], p.at[i, "channel"]).lower()
+        peers = f"{n} {channel} prices" if enough[i] else f"only {n} comparable market{'s' if n != 1 else ''}"
         display.append([
             f"{_pct(ratio[i])} versus the median of {peers}" if enough[i] else f"not compared ({peers})",
             f"{z[i]:+.2f} within {peers}" if enough[i] else f"not compared ({peers})",
-            f"{_pct(market_res[i])} after allowing for this market's usual level",
-            f"{_pct(province_res[i])} after allowing for this province's usual level",
+            f"{_pct(market_res[i])} compared with this market's usual price level",
+            f"{_pct(province_res[i])} compared with this province's usual price level",
             str(p.at[i, "channel"]),
             f"retail is {_pct(np.exp(rf[i]))} over farm gate (typical {_pct(np.exp(t_rf))})" if has_rf[i] else "not compared on this channel",
             f"wholesale is {_pct(np.exp(wf[i]))} over farm gate (typical {_pct(np.exp(t_wf))})" if has_wf[i] else "not compared on this channel",

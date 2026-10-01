@@ -1,3 +1,4 @@
+import { CHANNEL_LABEL } from "../catalog";
 import { median, robustStats, robustZ } from "../stats";
 import type { DataRecord, PriceChannel } from "../types";
 
@@ -124,13 +125,15 @@ export function buildPriceFeatures(records: DataRecord[]): PricedPoint[] {
     const wf = hasWF ? log(g.wholesale! / g.farmgate!) : typicalWsFarm;
     const rw = hasRW ? log(g.retail! / g.wholesale!) : typicalRetailWs;
 
-    const peerNote = enoughPeers ? `${stats.n} ${r.channel} observations` : `only ${stats.n} comparable market${stats.n === 1 ? "" : "s"}`;
+    const peerNote = enoughPeers
+      ? `${stats.n} ${(CHANNEL_LABEL[r.channel] ?? r.channel).toLowerCase()} prices`
+      : `only ${stats.n} comparable market${stats.n === 1 ? "" : "s"}`;
     const values = [log(ratio), z, log(marketResidual), log(provinceResidual), CHANNEL_CODE[r.channel], rf, wf, rw];
     const display = [
       enoughPeers ? `${pct(ratio)} versus the median of ${peerNote}` : `not compared (${peerNote})`,
       enoughPeers ? `${z >= 0 ? "+" : ""}${z.toFixed(2)} within ${peerNote}` : `not compared (${peerNote})`,
-      `${pct(marketResidual)} after allowing for this market's usual level`,
-      `${pct(provinceResidual)} after allowing for this province's usual level`,
+      `${pct(marketResidual)} compared with this market's usual price level`,
+      `${pct(provinceResidual)} compared with this province's usual price level`,
       r.channel,
       hasRF ? `retail is ${pct(Math.exp(rf))} over farm gate (typical ${pct(Math.exp(typicalRetailFarm))})` : "not compared on this channel",
       hasWF ? `wholesale is ${pct(Math.exp(wf))} over farm gate (typical ${pct(Math.exp(typicalWsFarm))})` : "not compared on this channel",

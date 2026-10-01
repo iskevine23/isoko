@@ -19,8 +19,8 @@ def _title(s: str) -> str:
 
 
 def _entity_issue(row: Row, kind: str, m: MatchResult) -> dict | None:
-    label = kind.capitalize()
-    registry = "registry" if kind == "market" else "catalog"
+    is_market = kind == "market"
+    noun = "market" if is_market else "product"
     evidence = [(c.value, f"{c.score * 100:.0f}% — {c.reason}") for c in m.candidates]
     raw = m.input
     if m.status in ("exact", "auto", "empty"):
@@ -29,37 +29,48 @@ def _entity_issue(row: Row, kind: str, m: MatchResult) -> dict | None:
         c = load_catalog().archived_by_name(raw)
         return issue(
             row.id, "ENTITY_MATCH", "match", "medium", 1.0,
-            f'Commodity is archived in the e-Soko catalog: "{raw}"',
-            f'"{c.name}" (product {c.id}, code {c.code}) is archived in the e-Soko catalog, but prices are still recorded for it.',
-            [("Catalog product", f"{c.name} · id {c.id}"), ("Catalog status", "Archived")],
-            "Confirm whether this product is still collected. If it is, restore it in the catalog; if not, stop collecting it.",
+            f'Discontinued product: "{raw}"',
+            f'"{c.name}" (code {c.code}) is no longer on the list of products whose prices are collected, '
+            "but this file still reports a price for it.",
+            [("Product", f"{c.name} · code {c.code}"), ("Status", "Discontinued (archived)")],
+            "Check whether this product should still be collected. If yes, ask an administrator to restore it; "
+            "if not, remove the row.",
             m.method,
         )
     if m.status == "unknown":
         cat = load_catalog()
-        size = len(cat.markets) if kind == "market" else len(cat.commodities)
         return issue(
-            row.id, "UNKNOWN_ENTITY", "match", "high", 0.88, f'Unknown {kind}: "{raw}"',
-            f'"{raw}" does not resemble any of the {size} entries in the e-Soko {registry}.',
-            [(c.value, f"{c.score * 100:.0f}% similarity") for c in m.candidates],
-            "Correct the market name or register the market." if kind == "market"
-            else "Correct the commodity name or add it to the catalog.",
+            row.id, "UNKNOWN_ENTITY", "match", "high", 0.88,
+            f'Not a known market: "{raw}"' if is_market else f'Not a known agricultural product: "{raw}"',
+            f'"{raw}" does not match any of the {len(cat.markets)} markets where prices are collected, '
+            "and no similar name was found." if is_market else
+            f'"{raw}" does not match any of the {len(cat.commodities)} agricultural products tracked in Rwandan '
+            "markets, and no similar name was found. It may be misspelled, not an agricultural product, or a "
+            "product that is not tracked yet.",
+            [(c.value, f"{c.score * 100:.0f}% similar (too low to match)") for c in m.candidates],
+            "Correct the market name if it is misspelled, or ask an administrator to register this market."
+            if is_market else
+            "Correct the name if it is misspelled. If it is a real agricultural product, ask an administrator "
+            "to add it; otherwise remove the row.",
             m.method,
         )
     if m.status == "ambiguous":
         tied = [c.value for c in m.candidates if m.candidates[0].score - c.score < 0.02]
         return issue(
             row.id, "ENTITY_MATCH", "match", "medium", m.score,
-            f'{label} name matches {len(tied)} {registry} entries: "{raw}"',
-            f'"{raw}" fits {" and ".join(chr(34) + t + chr(34) for t in tied)} equally well, so a person must choose.',
-            evidence, f'Choose the correct {kind}. "{m.value}" is listed first only because of catalog order.', m.method,
-            (kind, m.value),
+            f'Unclear {noun}: "{raw}" matches {len(tied)} {noun}s',
+            f'"{raw}" fits {" and ".join(chr(34) + t + chr(34) for t in tied)} equally well, '
+            "so the system cannot tell which one was meant.",
+            evidence, f'Choose the correct {noun}. "{m.value}" is listed first only by order, not because it is more likely.',
+            m.method, (kind, m.value),
         )
     return issue(
-        row.id, "ENTITY_MATCH", "match", "low" if kind == "market" or m.score >= 0.78 else "medium", m.score,
-        f'{label} name needs confirmation: "{raw}"',
-        f'"{raw}" is not an exact {registry} entry. The closest match is "{m.value}".',
-        evidence, f'Map to "{m.value}" or choose another {kind}.', m.method, (kind, m.value),
+        row.id, "ENTITY_MATCH", "match", "low" if is_market or m.score >= 0.78 else "medium", m.score,
+        f'Check the {noun} name: "{raw}"',
+        f'"{raw}" is not a known {noun} name, but it looks like "{m.value}" ({m.score * 100:.0f}% similar). '
+        "It was not changed automatically because the match is not certain enough.",
+        evidence, f'If "{raw}" means "{m.value}", accept the suggestion. Otherwise choose the correct {noun}.',
+        m.method, (kind, m.value),
     )
 
 

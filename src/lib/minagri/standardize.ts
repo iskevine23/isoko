@@ -199,7 +199,7 @@ export function standardize(
     };
     const resolveEntity = (kind: "commodity" | "market", rawValue: string): EntityMatch => {
       const isMarket = kind === "market";
-      const label = isMarket ? "Market" : "Commodity";
+      const noun = isMarket ? "market" : "product";
       let value = titleCase(normalizeText(rawValue));
       let confidence = 1;
       let embedded = false;
@@ -217,15 +217,15 @@ export function standardize(
           category: "match",
           severity: "medium",
           confidence: 1,
-          title: `Commodity is archived in the e-Soko catalog: "${rawValue}"`,
-          explanation: `"${archived.name}" (product ${archived.id}, code ${archived.code}) is marked archived in the e-Soko catalog, but prices are still being recorded for it.`,
+          title: `Discontinued product: "${rawValue}"`,
+          explanation: `"${archived.name}" (code ${archived.code}) is no longer on the list of products whose prices are collected, but this file still reports a price for it.`,
           evidence: [
-            { label: "Catalog product", value: `${archived.name} · id ${archived.id}` },
-            { label: "Catalog status", value: "Archived" },
+            { label: "Product", value: `${archived.name} · code ${archived.code}` },
+            { label: "Status", value: "Discontinued (archived)" },
           ],
           recommendation:
-            "Confirm whether this product is still collected. If it is, restore it in the catalog; if not, stop collecting it.",
-          method: "Exact lookup in the archived part of the e-Soko catalog",
+            "Check whether this product should still be collected. If yes, ask an administrator to restore it; if not, remove the row.",
+          method: "Exact lookup in the list of discontinued products",
           status: "open",
         };
         return { value: archived.name, confidence: 1, embedded, issue };
@@ -237,8 +237,8 @@ export function standardize(
       const matches = ranked.matches;
       const top = matches[0];
       const method = embedded
-        ? `Fuzzy match checked by a TF-IDF character model fitted on the ${isMarket ? "market registry" : "commodity catalog"}${ranked.modelAgrees ? " (models agree)" : " (models disagree)"}`
-        : `${isMarket ? "Market registry" : "Catalog"} lookup (normalisation, edit distance, token overlap, e-Soko names)`;
+        ? `Spelling match checked by a TF-IDF character model trained on known ${noun} names${ranked.modelAgrees ? " (models agree)" : " (models disagree)"}`
+        : `Comparison with known ${noun} names (spelling, word order, Kinyarwanda and French names)`;
       const evidence = matches.map((m) => ({
         label: m.value,
         value: `${Math.round(m.score * 100)}% — ${m.reason}`,
@@ -254,10 +254,10 @@ export function standardize(
             category: "match",
             severity: "medium",
             confidence: top.score,
-            title: `${label} name matches ${tied.length} catalog entries: "${rawValue}"`,
-            explanation: `"${rawValue}" fits ${tied.map((t) => `"${t}"`).join(" and ")} equally well. The catalog has more than one entry with this name, so a person must choose.`,
+            title: `Unclear ${noun}: "${rawValue}" matches ${tied.length} ${noun}s`,
+            explanation: `"${rawValue}" fits ${tied.map((t) => `"${t}"`).join(" and ")} equally well, so the system cannot tell which one was meant.`,
             evidence,
-            recommendation: `Choose the correct ${kind}. "${top.value}" is shown first only because of catalog order.`,
+            recommendation: `Choose the correct ${noun}. "${top.value}" is listed first only by order, not because it is more likely.`,
             method,
             suggestion: { field: kind, value: top.value },
             status: "open",
@@ -268,10 +268,10 @@ export function standardize(
             category: "match",
             severity: isMarket || top.score >= 0.78 ? "low" : "medium",
             confidence: top.score,
-            title: `${label} name needs confirmation: "${rawValue}"`,
-            explanation: `"${rawValue}" is not an exact ${isMarket ? "registry" : "catalog"} entry. The closest match is "${top.value}".`,
+            title: `Check the ${noun} name: "${rawValue}"`,
+            explanation: `"${rawValue}" is not a known ${noun} name, but it looks like "${top.value}" (${Math.round(top.score * 100)}% similar). It was not changed automatically because the match is not certain enough.`,
             evidence,
-            recommendation: `Map to "${top.value}" or choose another ${kind}.`,
+            recommendation: `If "${rawValue}" means "${top.value}", accept the suggestion. Otherwise choose the correct ${noun}.`,
             method,
             suggestion: { field: kind, value: top.value },
             status: "open",
@@ -283,17 +283,19 @@ export function standardize(
           category: "match",
           severity: "high",
           confidence: 0.88,
-          title: `Unknown ${kind}: "${rawValue}"`,
+          title: isMarket
+            ? `Not a known market: "${rawValue}"`
+            : `Not a known agricultural product: "${rawValue}"`,
           explanation: isMarket
-            ? `"${rawValue}" is not in the e-Soko registry of ${MARKETS.length} markets.`
-            : `"${rawValue}" does not resemble any of the ${COMMODITIES.length} commodities in the e-Soko catalog.`,
+            ? `"${rawValue}" does not match any of the ${MARKETS.length} markets where prices are collected, and no similar name was found.`
+            : `"${rawValue}" does not match any of the ${COMMODITIES.length} agricultural products tracked in Rwandan markets, and no similar name was found. It may be misspelled, not an agricultural product, or a product that is not tracked yet.`,
           evidence: matches.map((m) => ({
             label: m.value,
-            value: `${Math.round(m.score * 100)}% similarity`,
+            value: `${Math.round(m.score * 100)}% similar (too low to match)`,
           })),
           recommendation: isMarket
-            ? "Correct the market name or register the market."
-            : "Correct the commodity name or add it to the catalog.",
+            ? "Correct the market name if it is misspelled, or ask an administrator to register this market."
+            : "Correct the name if it is misspelled. If it is a real agricultural product, ask an administrator to add it; otherwise remove the row.",
           method,
           status: "open",
         };
@@ -385,7 +387,8 @@ export function standardize(
 
     // rule based validation (layer 1)
     const missing: string[] = [];
-    if (!parsedDate) missing.push("date");
+    // An unreadable date gets its own INVALID_DATE finding below.
+    if (!rawDate) missing.push("date");
     if (!commodity) missing.push("commodity");
     if (!market) missing.push("market");
     if (!channel) missing.push("price type");
@@ -399,17 +402,22 @@ export function standardize(
         category: "conflict",
         severity: "high",
         confidence: 1,
-        title: `Unreadable date "${rawDate}"`,
+        title: `Date cannot be read: "${rawDate}"`,
         explanation:
-          "The date could not be interpreted with any known format (ISO, dd/mm/yyyy, d Month yyyy).",
+          "This date is in an unknown format or does not exist (for example 30 February). Without a valid date the price cannot be placed in time.",
         evidence: [{ label: "Raw value", value: rawDate }],
-        recommendation: "Provide the observation date as YYYY-MM-DD.",
+        recommendation: "Enter the date the price was collected, for example 2026-09-28.",
         method: "Rule-based validation (Layer 1)",
         status: "open",
       });
     }
 
     if (missing.length) {
+      const names = missing.map((m) => (m === "commodity" ? "product" : m));
+      const list =
+        names.length > 1
+          ? `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`
+          : names[0];
       issues.push({
         id: nextIssueId(),
         recordId: id,
@@ -418,14 +426,17 @@ export function standardize(
         severity:
           missing.includes("price") || missing.includes("commodity") ? "critical" : "medium",
         confidence: 1,
-        title: `Missing required ${missing.length > 1 ? "fields" : "field"}: ${missing.join(", ")}`,
-        explanation:
-          "Required reporting fields are empty. A missing price is not the same as a price of zero — this observation was never reported.",
+        title: `Missing ${list}`,
+        explanation: `This row has no ${list}, so it cannot be checked or used in price reports.${
+          missing.includes("price")
+            ? " An empty price means it was not reported; it is never treated as 0."
+            : ""
+        }`,
         evidence: [
           { label: "Row", value: `#${rowNumber}` },
           { label: "Missing", value: missing.join(", ") },
         ],
-        recommendation: "Ask the reporting market to resubmit the missing values.",
+        recommendation: "Fill in the missing value, or ask the market reporter to send it again.",
         method: "Rule-based validation (Layer 1)",
         status: "open",
       });
@@ -439,16 +450,19 @@ export function standardize(
         category: "conflict",
         severity: "critical",
         confidence: 1,
-        title: price === 0 ? "Price recorded as zero" : "Negative price recorded",
+        title: price === 0 ? "Price recorded as 0 RWF" : `Negative price recorded (${price} RWF)`,
         explanation:
           price === 0
-            ? "A zero price is impossible for a traded commodity. This usually means the market did not report, which must be recorded as missing data rather than zero."
-            : "A negative price is impossible and indicates a data-entry error.",
+            ? "A product cannot sell for 0 RWF. A zero usually means the price was not collected; leave the cell empty instead, so it counts as missing rather than free."
+            : "A price cannot be below zero, so this is a data-entry error.",
         evidence: [
           { label: "Observed", value: `${price} ${currency}` },
           { label: "Valid range", value: "> 0 RWF" },
         ],
-        recommendation: "Correct the price or mark the observation as not reported.",
+        recommendation:
+          price === 0
+            ? "Enter the real price, or leave it empty if it was not collected."
+            : "Enter the correct price.",
         method: "Rule-based validation (Layer 1)",
         status: "open",
       });
@@ -462,10 +476,10 @@ export function standardize(
         category: "conflict",
         severity: "medium",
         confidence: 0.85,
-        title: `Unrecognised unit "${rawUnit}"`,
-        explanation: `Units must be one of ${VALID_UNITS.join(", ")} so that prices are comparable across markets.`,
+        title: `Unknown unit: "${rawUnit}"`,
+        explanation: `Prices can only be compared between markets when they use the same unit. Accepted units are: ${VALID_UNITS.join(", ")}.`,
         evidence: [{ label: "Raw unit", value: rawUnit }],
-        recommendation: "Convert the observation to a standard unit.",
+        recommendation: "Change it to one of the accepted units, converting the price if needed.",
         method: "Rule-based validation (Layer 1)",
         status: "open",
       });
@@ -480,14 +494,14 @@ export function standardize(
         category: "conflict",
         severity: "medium",
         confidence: 0.8,
-        title: `Unit mismatch for ${commodity}`,
-        explanation: `${commodity} is normally reported in ${expectedUnit}, but this observation uses ${unit}.`,
+        title: `Unusual unit for ${commodity}`,
+        explanation: `${commodity} is normally priced per ${expectedUnit}, but this row uses ${unit}, so its price cannot be compared with other markets.`,
         evidence: [
           { label: "Reported unit", value: unit },
-          { label: "Catalog unit", value: expectedUnit },
+          { label: "Usual unit", value: expectedUnit },
         ],
         recommendation: `Convert the price to ${expectedUnit}.`,
-        method: "Catalog consistency check",
+        method: "Comparison with the usual unit for this product",
         suggestion: { field: "unit", value: expectedUnit },
         status: "open",
       });

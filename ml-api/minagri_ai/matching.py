@@ -256,7 +256,7 @@ class MatchingEngine:
                 archived = self.catalog.archived_by_name(raw)
                 if archived:
                     results[raw] = MatchResult(raw, archived.name, 1.0, "archived",
-                                               "Exact lookup in the archived part of the e-Soko catalog")
+                                               "Exact lookup in the list of discontinued products")
                     continue
             query = variants[-1]
             scores = self._fuzzy(query) if not hit else np.where(np.isin(np.arange(len(self.canonicals)), list(hit)), 1.0, 0.0)
@@ -286,7 +286,7 @@ class MatchingEngine:
         cands = [Candidate(self.canonicals[i], float(fz[i]), f"RapidFuzz {fz[i] * 100:.0f}%") for i in order]
         ambiguous = len(cands) > 1 and cands[0].score - cands[1].score < TIE_MARGIN and cands[0].score >= 0.5
         agree: bool | None = None
-        method = "RapidFuzz (edit distance and token similarity) against catalog names and aliases"
+        method = "RapidFuzz (spelling and word-order similarity) against known names, including Kinyarwanda and French"
         if emb is not None:
             e_idx = int(np.argmax(emb))
             e_score = float(max(emb[e_idx], 0.0))

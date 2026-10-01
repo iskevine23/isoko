@@ -46,15 +46,15 @@ LADDER_ISSUE_EXAMPLE = {
     "category": "conflict",
     "severity": "medium",
     "confidence": 0.875,
-    "title": "Pricing ladder violation — Wholesale above Retail",
+    "title": "Wholesale price is higher than retail price",
     "explanation": "For Beans at Kimironko, the wholesale price (1,500 RWF) is higher than the retail price (1,200 RWF). "
-                   "The expected order is farm gate ≤ wholesale ≤ retail.",
+                   "Prices normally rise from farm gate to wholesale to retail, so one of these two prices is probably wrong.",
     "evidence": [
         {"label": "Wholesale", "value": "1,500 RWF (row #0)"},
         {"label": "Retail", "value": "1,200 RWF (row #0)"},
         {"label": "Inversion", "value": "25.0%"},
     ],
-    "recommendation": "Confirm which of the two prices was mis-recorded.",
+    "recommendation": "Check both prices with the market reporter and correct the one that was entered wrongly.",
     "method": "Contextual rule — farm gate ≤ wholesale ≤ retail (Layer 3)",
     "status": "open",
 }
@@ -64,7 +64,7 @@ MATCH_EXAMPLE = {
     "value": "Irish-potato",
     "score": 0.96,
     "status": "auto",
-    "method": "RapidFuzz (edit distance and token similarity) against catalog names and aliases",
+    "method": "RapidFuzz (spelling and word-order similarity) against known names, including Kinyarwanda and French",
     "usedEmbedding": False,
     "modelsAgree": None,
     "embeddingTop": None,

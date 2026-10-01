@@ -37,7 +37,7 @@ def test_raw_esoko_exports_reproduce_snapshot_coverage(client):
     assert body["coverage"]["reportingMarkets"] == 11
     assert "Northern Province" in body["coverage"]["missingProvinces"]
     assert body["ml"]["isolationForest"]["applied"]
-    assert any(i["title"].startswith("Commodity is archived") for i in body["issues"])
+    assert any(i["title"].startswith("Discontinued product") for i in body["issues"])
 
 
 def test_injected_errors_are_flagged(client):
